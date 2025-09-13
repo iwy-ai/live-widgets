@@ -1,0 +1,38 @@
+{
+  "name": "@iwy/live-widgets",
+  "version": "1.0.0",
+  "description": "Embeddable AI avatar widget for live video chat",
+  "type": "module",
+  "main": "dist/live-avatar.js",
+  "module": "dist/live-avatar.esm.js",
+  "unpkg": "dist/live-avatar.min.js",
+  "jsdelivr": "dist/live-avatar.min.js",
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "ai",
+    "avatar",
+    "widget",
+    "video-chat",
+    "webcomponent",
+    "embedding"
+  ],
+  "author": "iwy.ai",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iwy-ai/live-widgets.git"
+  },
+  "homepage": "https://www.iwy.ai",
+  "devDependencies": {
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^4.9.0"
+  },
+  "peerDependencies": {},
+  "dependencies": {}
+}
