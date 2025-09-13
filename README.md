@@ -1,4 +1,4 @@
-# @iwy/live-avatar
+# @iwy/live-widgets
 
 Library of embeddable AI avatar widgets for live conversational video chat. This package allows you to easily embed interactive AI avatars on any website.
 
@@ -7,17 +7,17 @@ Library of embeddable AI avatar widgets for live conversational video chat. This
 ### Via npm
 
 ```bash
-npm install @iwy/live-avatar
+npm install @iwy/live-widgets
 ```
 
 ### Via CDN
 
 ```html
 <!-- jsDelivr CDN -->
-<script src="https://cdn.jsdelivr.net/npm/@iwy/live-avatar@1.0.0/dist/live-avatar.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@iwy/live-widgets@1.0.0/dist/live-avatar.min.js"></script>
 
 <!-- unpkg CDN -->
-<script src="https://unpkg.com/@iwy/live-avatar@1.0.0/dist/live-avatar.min.js"></script>
+<script src="https://unpkg.com/@iwy/live-widgets@1.0.0/dist/live-avatar.min.js"></script>
 ```
 
 ## Usage
@@ -35,7 +35,7 @@ npm install @iwy/live-avatar
 
     <!-- Live Avatar Widget -->
     <live-avatar agentid="your-agent-id-here"></live-avatar>
-    <script src="https://cdn.jsdelivr.net/npm/@iwy/live-avatar@1.0.0/dist/live-avatar.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@iwy/live-widgets@1.0.0/dist/live-avatar.min.js"></script>
 </body>
 </html>
 ```
@@ -43,7 +43,7 @@ npm install @iwy/live-avatar
 ### ES Module Usage
 
 ```javascript
-import '@iwy/live-avatar';
+import '@iwy/live-widgets';
 
 // Now you can use the <live-avatar> custom element in your HTML
 ```
