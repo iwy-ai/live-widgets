@@ -4,8 +4,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Build output
-dist/
+# Build output (prevent only the dir at "/dist" the dir at "/live-avatar/dist" should be tracked)
+/dist/
 build/
 
 # Environment variables

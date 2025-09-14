@@ -98,7 +98,7 @@
       }
   
       static get observedAttributes() {
-        return ["agentid", "data-endpoint"];
+        return ["agentid", "data-endpoint", "placeholder-src"];
       }
   
       attributeChangedCallback(name, _old, value) {
@@ -107,6 +107,9 @@
         }
         if (name === "data-endpoint") {
           this._sessionEndpoint = value;
+        }
+        if (name === "placeholder-src") {
+          this._updatePlaceholder();
         }
       }
   
@@ -547,11 +550,8 @@
         this._audioBar.className = "audio-bar";
         this._container.appendChild(this._audioBar);
   
-        // Placeholder image
-        this._placeholder = document.createElement("img");
-        this._placeholder.src = "https://talk.iwy.ai/assets/demo-character.webp";
-        this._placeholder.alt = "AI agent";
-        this._placeholder.className = "placeholder";
+        // Placeholder (image or video based on placeholder-src attribute)
+        this._createPlaceholder();
         this._container.appendChild(this._placeholder);
   
         // Video element
@@ -941,12 +941,61 @@
       }
   
       /* ---------------------------------------------------------
+       *  Placeholder management
+       * --------------------------------------------------------- */
+      _createPlaceholder() {
+        const placeholderSrc = this.getAttribute("placeholder-src");
+        
+        if (placeholderSrc) {
+          // Use image for custom placeholder
+          this._placeholder = document.createElement("img");
+          this._placeholder.src = placeholderSrc;
+          this._placeholder.alt = "AI agent";
+        } else {
+          // Use default webp image as fallback
+          this._placeholder = document.createElement("img");
+          this._placeholder.src = "https://talk.iwy.ai/assets/demo-character.webp";
+          this._placeholder.alt = "AI agent";
+        }
+        
+        this._placeholder.className = "placeholder";
+      }
+
+      _updatePlaceholder() {
+        if (!this._placeholder) return;
+        
+        const placeholderSrc = this.getAttribute("placeholder-src");
+        
+        if (placeholderSrc) {
+          // Switch to image if not already
+          if (this._placeholder.tagName !== "IMG") {
+            const oldPlaceholder = this._placeholder;
+            this._placeholder = document.createElement("img");
+            this._placeholder.className = "placeholder";
+            this._placeholder.alt = "AI agent";
+            this._container.replaceChild(this._placeholder, oldPlaceholder);
+          }
+          this._placeholder.src = placeholderSrc;
+        } else {
+          // Use default webp image
+          if (this._placeholder.tagName !== "IMG") {
+            const oldPlaceholder = this._placeholder;
+            this._placeholder = document.createElement("img");
+            this._placeholder.className = "placeholder";
+            this._placeholder.alt = "AI agent";
+            this._container.replaceChild(this._placeholder, oldPlaceholder);
+          }
+          this._placeholder.src = "https://talk.iwy.ai/assets/demo-character.webp";
+        }
+      }
+
+      /* ---------------------------------------------------------
        *  Static helpers
        * --------------------------------------------------------- */
       static loadDaily() {
         if (window.Daily) return Promise.resolve();
         if (LiveAvatar._dailyPromise) return LiveAvatar._dailyPromise;
-  
+
         LiveAvatar._dailyPromise = new Promise((resolve, reject) => {
           const script = document.createElement("script");
           script.src = DAILY_JS_SRC;
