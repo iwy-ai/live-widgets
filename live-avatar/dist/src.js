@@ -684,7 +684,8 @@
         try {
           await this._dailyReady;
           if (!window.Daily) throw new Error("Daily JS failed to load");
-  
+
+
           // Request session from backend
           const res = await fetch(this._sessionEndpoint, {
             method: "POST",
@@ -697,6 +698,7 @@
           // Create/Reuse call object
           this._call = window.Daily.createCallObject();
           this._call.setLocalVideo(false);
+          this._call.setLocalAudio(true);
   
           // Bind events
           this._call.on("joined-meeting", (e) => this._handleJoined(e));
@@ -708,6 +710,11 @@
   
           // Join room – only include token if non-null/defined
           const joinArgs = dailyToken ? { url: roomUrl, token: dailyToken } : { url: roomUrl };
+          
+          // Configure audio-only before joining to prevent camera permission request
+          joinArgs.startVideoOff = true;
+          joinArgs.startAudioOff = false;
+          
           await this._call.join(joinArgs);
         } catch (err) {
           console.error(err);
