@@ -81,3 +81,6 @@ tmp/
 temp/
 
 .node_modules
+
+# File for testing purposes:
+main.html
