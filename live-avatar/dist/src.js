@@ -518,6 +518,75 @@
           }
         `;
         this.shadowRoot.appendChild(barStyle);
+
+        // Bars spinner styles
+        const barsSpinnerStyle = document.createElement("style");
+        barsSpinnerStyle.textContent = `
+          .bars-spinner {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 24px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1006;
+            pointer-events: none;
+          }
+          .bars-spinner.visible {
+            opacity: 1;
+          }
+          .bars-spinner svg {
+            filter: drop-shadow(0 0 2px rgba(67, 39, 39, 0.8)) drop-shadow(0 0 4px rgba(255, 255, 255, 0.6));
+          }
+          .spinner-bar {
+            animation: spinner-bars-animation 1.4s linear infinite;
+            animation-delay: -1.4s;
+            fill: #ffffff;
+          }
+          .spinner-bars-2 {
+            animation-delay: -1.15s;
+          }
+          .spinner-bars-3 {
+            animation-delay: -0.9s;
+          }
+          @keyframes spinner-bars-animation {
+            0% {
+              y: 1px;
+              height: 22px;
+              fill: #ffffff;
+              opacity: 1;
+            }
+            25% {
+              fill: #f0f0f0;
+              opacity: 0.9;
+            }
+            50% {
+              y: 3px;
+              height: 18px;
+              fill: #888888;
+              opacity: 0.7;
+            }
+            75% {
+              fill: #333333;
+              opacity: 0.4;
+            }
+            93.75% {
+              y: 5px;
+              height: 14px;
+              fill: #000000;
+              opacity: 0.2;
+            }
+            100% {
+              y: 1px;
+              height: 22px;
+              fill: #ffffff;
+              opacity: 1;
+            }
+          }
+        `;
+        this.shadowRoot.appendChild(barsSpinnerStyle);
   
         const actionAnimStyle = document.createElement("style");
         actionAnimStyle.textContent = `
@@ -549,6 +618,40 @@
         this._audioBar = document.createElement("div");
         this._audioBar.className = "audio-bar";
         this._container.appendChild(this._audioBar);
+
+        // Bars spinner
+        this._barsSpinner = document.createElement("div");
+        this._barsSpinner.className = "bars-spinner";
+        this._barsSpinner.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <title>Loading...</title>
+            <rect
+              class="spinner-bar"
+              x="1"
+              y="1"
+              width="6"
+              height="22"
+              fill="currentColor"
+            />
+            <rect
+              class="spinner-bar spinner-bars-2"
+              x="9"
+              y="1"
+              width="6"
+              height="22"
+              fill="currentColor"
+            />
+            <rect
+              class="spinner-bar spinner-bars-3"
+              x="17"
+              y="1"
+              width="6"
+              height="22"
+              fill="currentColor"
+            />
+          </svg>
+        `;
+        this._container.appendChild(this._barsSpinner);
   
         // Placeholder (image or video based on placeholder-src attribute)
         this._createPlaceholder();
@@ -666,6 +769,9 @@
         }
   
         this._setStatus("", false);
+        // Show bars spinner immediately
+        this._barsSpinner.classList.add("visible");
+        
         // Schedule grayscale effect after container expansion (700ms)
         if (this._grayscaleTimeout) clearTimeout(this._grayscaleTimeout);
         if (this._placeholder) {
@@ -719,6 +825,7 @@
         } catch (err) {
           console.error(err);
           this._setStatus(err.message || "Error", true);
+          this._barsSpinner.classList.remove("visible");
           this._resetConnectingState();
         }
       }
@@ -733,8 +840,10 @@
       }
   
       _handleJoined(event) {
+        console.log("User joined the call");
         this._state.connected = true;
         this._state.connecting = false;
+        // Remove spinner hiding - will be handled when bot participant joins
         this._video.classList.add("visible");
         // Remove grayscale (fade back to color) and schedule fade-out after delay
         if (this._grayscaleTimeout) { clearTimeout(this._grayscaleTimeout); this._grayscaleTimeout = null; }
@@ -778,6 +887,7 @@
       _handleError(ev) {
         console.error("DAILY ERROR", ev.error || ev);
         this._setStatus("Call error", true);
+        this._barsSpinner.classList.remove("visible");
         this._cleanupCall();
         this._updateUIDisconnected();
       }
@@ -785,6 +895,13 @@
       _handleParticipant(ev) {
         const p = ev.participant;
         if (p.local) return; // ignore local updates here
+        
+        // Check if this is a bot participant joining and hide spinner
+        if (this._isBotParticipant(p) && this._barsSpinner.classList.contains("visible")) {
+          console.log("Bot participant joined the call:", p.user_name || p.session_id);
+          this._barsSpinner.classList.remove("visible");
+        }
+        
         const tracks = p.tracks;
         Object.entries(tracks).forEach(([type, info]) => {
           if (info.persistentTrack) this._startOrUpdateTrack(type, info, p.session_id);
@@ -829,6 +946,7 @@
       _updateUIDisconnected() {
         this._video.classList.remove("visible");
         this._video.srcObject = null;
+        this._barsSpinner.classList.remove("visible");
         this._placeholder.classList.remove("fade-out");
     this._placeholder.classList.remove("grayscale");
     if (this._grayscaleTimeout) { clearTimeout(this._grayscaleTimeout); this._grayscaleTimeout = null; }
@@ -994,6 +1112,15 @@
           }
           this._placeholder.src = "https://talk.iwy.ai/assets/demo-character.webp";
         }
+      }
+
+      _isBotParticipant(participant) {
+        // Check if participant is a bot by looking for "Bot" in user_name or checking bot_name property
+        const userName = participant.user_name || '';
+        const botName = participant.bot_name;
+        
+        // Check if user_name contains "Bot" (case insensitive) or if bot_name is set
+        return userName.toLowerCase().includes('bot') || !!botName;
       }
 
       /* ---------------------------------------------------------
