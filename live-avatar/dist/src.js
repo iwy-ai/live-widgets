@@ -851,7 +851,7 @@
         if (this._fadeTimeout) clearTimeout(this._fadeTimeout);
         this._fadeTimeout = setTimeout(() => {
           this._placeholder.classList.add("fade-out");
-        }, 15000);
+        }, 25000);
         this._container.classList.add("expanded");
         this._closeBtn.style.display = "none";
         this._startBtn.style.display = "none";
