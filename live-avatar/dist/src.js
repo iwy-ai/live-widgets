@@ -851,7 +851,7 @@
         if (this._fadeTimeout) clearTimeout(this._fadeTimeout);
         this._fadeTimeout = setTimeout(() => {
           this._placeholder.classList.add("fade-out");
-        }, 25000);
+        }, 35000);
         this._container.classList.add("expanded");
         this._closeBtn.style.display = "none";
         this._startBtn.style.display = "none";
@@ -898,21 +898,21 @@
           console.log("Bot participant joined the call:", p.user_name || p.session_id);
           this._barsSpinner.classList.remove("visible");
           
-          // Show text carousel with 0.75s delay and fade-in transition
+          // Show text carousel with 4s delay and fade-in transition
           if (this._promptTimeout) clearTimeout(this._promptTimeout);
           this._promptText.style.transition = "opacity 0.4s ease-out";
           this._promptTimeout = setTimeout(() => {
             this._promptText.style.display = "block";
             this._promptText.style.opacity = "1";
-          }, 750);
+          }, 4000);
           
-          // Show audio bar with 0.75s delay and fade-in transition
+          // Show audio bar with 4s delay and fade-in transition
           if (this._barFadeTimeout) clearTimeout(this._barFadeTimeout);
           if (this._audioBar) {
             this._audioBar.style.transition = "opacity 0.4s ease-out";
             this._barFadeTimeout = setTimeout(() => {
               this._audioBar.style.opacity = "1";
-            }, 750);
+            }, 4000);
           }
         }
         
