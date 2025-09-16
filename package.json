@@ -1,6 +1,6 @@
 {
   "name": "@iwy/live-widgets",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Embeddable AI avatar widget for live video chat",
   "type": "module",
   "main": "dist/live-avatar.js",

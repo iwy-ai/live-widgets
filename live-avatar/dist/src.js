@@ -864,13 +864,10 @@
           const stream = new MediaStream([localAudio.persistentTrack]);
           this._startMicLevelVisualization(stream);
         }
+        // Text carousel and audio bar will be shown when bot participant joins
         if (this._promptTimeout) clearTimeout(this._promptTimeout);
-    this._promptText.style.opacity = "0";
-    this._promptText.style.display = "none";
-    this._promptTimeout = setTimeout(() => {
-      this._promptText.style.display = "block";
-      this._promptText.style.opacity = "1";
-    }, 4000);
+        this._promptText.style.opacity = "0";
+        this._promptText.style.display = "none";
         this._setStatus("", false);
   
         const tracks = event.participants.local.tracks;
@@ -900,6 +897,23 @@
         if (this._isBotParticipant(p) && this._barsSpinner.classList.contains("visible")) {
           console.log("Bot participant joined the call:", p.user_name || p.session_id);
           this._barsSpinner.classList.remove("visible");
+          
+          // Show text carousel with 0.75s delay and fade-in transition
+          if (this._promptTimeout) clearTimeout(this._promptTimeout);
+          this._promptText.style.transition = "opacity 0.4s ease-out";
+          this._promptTimeout = setTimeout(() => {
+            this._promptText.style.display = "block";
+            this._promptText.style.opacity = "1";
+          }, 750);
+          
+          // Show audio bar with 0.75s delay and fade-in transition
+          if (this._barFadeTimeout) clearTimeout(this._barFadeTimeout);
+          if (this._audioBar) {
+            this._audioBar.style.transition = "opacity 0.4s ease-out";
+            this._barFadeTimeout = setTimeout(() => {
+              this._audioBar.style.opacity = "1";
+            }, 750);
+          }
         }
         
         const tracks = p.tracks;
@@ -995,13 +1009,10 @@
   
           // Stop entrance animation so our transforms are not overridden
           this._micBtn.style.animation = "none";
-          // Prepare audio bar fade-in after delay
+          // Audio bar will be shown when bot participant joins
           if (this._barFadeTimeout) clearTimeout(this._barFadeTimeout);
           this._audioBar.style.opacity = "0";
           this._audioBar.style.transition = "opacity 0.4s ease-out";
-          this._barFadeTimeout = setTimeout(() => {
-            if (this._audioBar) this._audioBar.style.opacity = "1";
-          }, 1000);
   
           // Capture original transform to preserve translateY or other effects
           this._micBaseTransform = window.getComputedStyle(this._micBtn).transform;
