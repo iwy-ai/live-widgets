@@ -56,6 +56,18 @@
     
     const DEFAULT_SESSION_ENDPOINT = "https://api.iwy.ai/api/start-agent-session";
   
+    // Language configuration for prompt messages
+    const LANGUAGE_CONFIG = {
+      en: {
+        listening: "Listening...",
+        talkToInterrupt: "Talk to interrupt."
+      },
+      no: {
+        listening: "Lytter...",
+        talkToInterrupt: "Snakk for å avbryte."
+      }
+    };
+  
     /* -------------------------------------------------------------
      *  <live-avatar> implementation
      * ------------------------------------------------------------- */
@@ -70,6 +82,7 @@
         };
         this._call = null; // Daily callObject
         this._agentId = null;
+        this._language = "en"; // Default language
         this._promptTimeout = null;
           // Timeout handle for delayed placeholder fade-out
           this._fadeTimeout = null;
@@ -98,7 +111,7 @@
       }
   
       static get observedAttributes() {
-        return ["agentid", "data-endpoint", "placeholder-src"];
+        return ["agentid", "data-endpoint", "placeholder-src", "language"];
       }
   
       attributeChangedCallback(name, _old, value) {
@@ -111,12 +124,17 @@
         if (name === "placeholder-src") {
           this._updatePlaceholder();
         }
+        if (name === "language") {
+          this._language = value || "en";
+          this._updatePromptMessages();
+        }
       }
   
       connectedCallback() {
         // Apply defaults if attributes weren’t present at construction
         if (!this._agentId) this._agentId = this.getAttribute("agentid");
         this._sessionEndpoint = this.getAttribute("data-endpoint") || DEFAULT_SESSION_ENDPOINT;
+        this._language = this.getAttribute("language") || "en";
   
         // Button listeners
         this._startBtn.addEventListener("click", () => this._startCall());
@@ -156,6 +174,12 @@
         this._stopCall();
         this._startBtn.removeEventListener("click", this._startCall);
         this._endBtn.removeEventListener("click", this._stopCall);
+        
+        // Clean up prompt switching interval
+        if (this._promptSwitchInterval) {
+          clearInterval(this._promptSwitchInterval);
+          this._promptSwitchInterval = null;
+        }
       }
   
       /* ---------------------------------------------------------
@@ -702,21 +726,11 @@
         // Instruction shimmering text between mic and end buttons
         this._promptText = document.createElement("span");
         this._promptText.className = "prompt-text";
-        this._promptText.textContent = "Listening...";
         this._container.appendChild(this._promptText);
-  
-        // Switch between messages every 9 seconds with blur transition
-        const promptMessages = ["Listening...", "Talk to interrupt."];
-        let promptIdx = 0;
-        setInterval(() => {
-          // trigger blur animation
-          this._promptText.classList.add("text-switch");
-          setTimeout(() => {
-            promptIdx = (promptIdx + 1) % promptMessages.length;
-            this._promptText.textContent = promptMessages[promptIdx];
-            this._promptText.classList.remove("text-switch");
-          }, 400);
-        }, 9000); // switc
+
+        // Initialize prompt messages and set up switching
+        this._updatePromptMessages();
+        this._setupPromptSwitching();
   
         // Close (×) button – only visible when collapsed
         this._closeBtn = document.createElement("button");
@@ -1132,6 +1146,38 @@
         
         // Check if user_name contains "Bot" (case insensitive) or if bot_name is set
         return userName.toLowerCase().includes('bot') || !!botName;
+      }
+
+      /* ---------------------------------------------------------
+       *  Language and prompt message helpers
+       * --------------------------------------------------------- */
+      _updatePromptMessages() {
+        const config = LANGUAGE_CONFIG[this._language] || LANGUAGE_CONFIG.en;
+        this._promptMessages = [config.listening, config.talkToInterrupt];
+        
+        // Update current text if prompt text element exists
+        if (this._promptText) {
+          this._promptText.textContent = this._promptMessages[0];
+        }
+      }
+
+      _setupPromptSwitching() {
+        if (this._promptSwitchInterval) {
+          clearInterval(this._promptSwitchInterval);
+        }
+        
+        let promptIdx = 0;
+        this._promptSwitchInterval = setInterval(() => {
+          if (!this._promptMessages) return;
+          
+          // trigger blur animation
+          this._promptText.classList.add("text-switch");
+          setTimeout(() => {
+            promptIdx = (promptIdx + 1) % this._promptMessages.length;
+            this._promptText.textContent = this._promptMessages[promptIdx];
+            this._promptText.classList.remove("text-switch");
+          }, 400);
+        }, 9000);
       }
 
       /* ---------------------------------------------------------
