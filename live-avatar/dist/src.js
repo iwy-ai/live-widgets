@@ -1104,7 +1104,7 @@
         } else {
           // Use default webp image as fallback
           this._placeholder = document.createElement("img");
-          this._placeholder.src = "https://talk.iwy.ai/assets/demo-character.webp";
+          this._placeholder.src = "https://talk.iwy.ai/assets/plc_dark_grey_loop.webp";
           this._placeholder.alt = "AI agent";
         }
         
@@ -1135,7 +1135,7 @@
             this._placeholder.alt = "AI agent";
             this._container.replaceChild(this._placeholder, oldPlaceholder);
           }
-          this._placeholder.src = "https://talk.iwy.ai/assets/demo-character.webp";
+          this._placeholder.src = "https://talk.iwy.ai/assets/plc_dark_grey_loop.webp";
         }
       }
 
