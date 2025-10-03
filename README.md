@@ -13,11 +13,11 @@ npm install @iwy/live-widgets
 ### Via CDN
 
 ```html
-<!-- jsDelivr CDN -->
-<script src="https://cdn.jsdelivr.net/npm/@iwy/live-widgets@1.0.0/dist/live-avatar.min.js"></script>
-
 <!-- unpkg CDN -->
-<script src="https://unpkg.com/@iwy/live-widgets@1.0.0/dist/live-avatar.min.js"></script>
+<script src="https://unpkg.com/@iwy/live-widgets@latest/dist/live-avatar.min.js"></script>
+
+<!-- jsDelivr CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@iwy/live-widgets@latest/dist/live-avatar.min.js"></script>
 ```
 
 ## Usage
@@ -35,7 +35,7 @@ npm install @iwy/live-widgets
 
     <!-- Live Avatar Widget -->
     <live-avatar agentid="your-agent-id-here"></live-avatar>
-    <script src="https://cdn.jsdelivr.net/npm/@iwy/live-widgets@1.0.0/dist/live-avatar.min.js"></script>
+    <script src="https://unpkg.com/@iwy/live-widgets@latest/dist/live-avatar.min.js"></script>
 </body>
 </html>
 ```
