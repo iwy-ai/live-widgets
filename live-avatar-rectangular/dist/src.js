@@ -201,6 +201,25 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
           background: #000;
         }
 
+        /* Top gradient shade */
+        .container::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 3rem; /* controls gradient height */
+          background: linear-gradient(to bottom,
+            rgba(0,0,0,0.65)  0%,
+            rgba(0,0,0,0.45)  15%,
+            rgba(0,0,0,0.25)  35%,
+            rgba(0,0,0,0.1)   60%,
+            rgba(0,0,0,0.02)  85%,
+            rgba(0,0,0,0)     100%);
+          pointer-events: none; /* allow interactions through */
+          z-index: 1;
+        }
+
         /* Bottom gradient shade */
         .container::after {
           content: "";
@@ -208,13 +227,14 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
           bottom: 0;
           left: 0;
           right: 0;
-          height: 2.5rem; /* controls gradient height */
+          height: 3rem; /* controls gradient height */
           background: linear-gradient(to top,
-            rgba(0,0,0,0.8)   0%,
-            rgba(0,0,0,0.75) 10%,
-            rgba(0,0,0,0.55) 25%,
-            rgba(0,0,0,0.25) 55%,
-            rgba(0,0,0,0)    100%);
+            rgba(0,0,0,0.65)  0%,
+            rgba(0,0,0,0.45)  15%,
+            rgba(0,0,0,0.25)  35%,
+            rgba(0,0,0,0.1)   60%,
+            rgba(0,0,0,0.02)  85%,
+            rgba(0,0,0,0)     100%);
           pointer-events: none; /* allow interactions through */
         }
 
