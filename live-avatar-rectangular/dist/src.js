@@ -148,6 +148,7 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
         this._menu.classList.toggle("visible");
       });
       document.addEventListener("click", () => this._menu.classList.remove("visible"));
+      this._addMenuLabel("iwy.ai");
       this._addMenuLink("Help", "https://www.iwy.ai/contact");
       this._addMenuLink("Privacy", "https://www.iwy.ai/privacy");
       this._addMenuLink("Terms", "https://www.iwy.ai/terms");
@@ -207,7 +208,7 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
           bottom: 0;
           left: 0;
           right: 0;
-          height: 5rem; /* controls gradient height */
+          height: 2.5rem; /* controls gradient height */
           background: linear-gradient(to top,
             rgba(0,0,0,0.8)   0%,
             rgba(0,0,0,0.75) 10%,
@@ -342,8 +343,8 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
           border: none;
           border-radius: 50%;
           cursor: pointer;
-          width: 1.25rem;
-          height: 1.25rem;
+          width: 1.75rem;
+          height: 1.75rem;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -351,8 +352,8 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
           z-index: 1003;
         }
         .menu-btn svg {
-          width: 1.125rem;
-          height: 1.125rem;
+          width: 1rem;
+          height: 1rem;
         }
         .menu {
           position: absolute;
@@ -375,6 +376,14 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
           white-space:nowrap;
         }
         .menu a:hover { background:#f3f3f3; }
+        .menu .menu-label {
+          padding:0.5rem 1rem;
+          font-size:0.75rem;
+          font-style:italic;
+          color:#666;
+          white-space:nowrap;
+          pointer-events:none;
+        }
 
         .status {
           position:absolute;
@@ -719,10 +728,10 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
       this._updatePromptMessages();
       this._setupPromptSwitching();
 
-      // Menu button (question mark icon)
+      // Menu button (three dots icon)
       this._menuBtn = document.createElement("button");
       this._menuBtn.className = "menu-btn";
-      this._menuBtn.innerHTML = `<svg width="1.125rem" height="1.125rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9 9a3 3 0 0 1 6 0c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
+      this._menuBtn.innerHTML = `<svg width="1rem" height="1rem" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>`;
       this._container.appendChild(this._menuBtn);
 
       // Menu
@@ -734,6 +743,13 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
       this._status = document.createElement("div");
       this._status.className = "status";
       this._container.appendChild(this._status);
+    }
+
+    _addMenuLabel(text) {
+      const label = document.createElement("div");
+      label.className = "menu-label";
+      label.textContent = text;
+      this._menu.appendChild(label);
     }
 
     _addMenuLink(text, href) {
