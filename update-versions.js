@@ -1,5 +1,9 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const newVersion = process.argv[2];
 if (!newVersion) {
@@ -17,7 +21,7 @@ const filesToUpdate = [
   },
   {
     path: path.join(__dirname, 'README.md'),
-    regex: /(@iwy\/live-widgets@)\d+\.\d+\.\d+/g,
+    regex: /(@iwy\/live-widgets@)(?:\d+\.\d+\.\d+|latest)/g,
     replacement: `$1${newVersion}`
   }
 ];
