@@ -180,7 +180,7 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
           display: block;
           width: 100%;
           height: 100%;
-          min-height: 200px;
+          min-height: 12.5rem;
           font-family: system-ui, sans-serif;
         }
 
@@ -192,11 +192,11 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
         .container {
           width: 100%;
           height: 100%;
-          min-height: 200px;
+          min-height: 12.5rem;
           position: relative;
           border-radius: 0.75rem;
           overflow: hidden;
-          border: 1px solid #e2e2e2;
+          border: 0.0625rem solid #e2e2e2;
           background: #000;
         }
 
@@ -207,7 +207,7 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
           bottom: 0;
           left: 0;
           right: 0;
-          height: 80px; /* controls gradient height */
+          height: 5rem; /* controls gradient height */
           background: linear-gradient(to top,
             rgba(0,0,0,0.8)   0%,
             rgba(0,0,0,0.75) 10%,
@@ -254,8 +254,8 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
 
         .controls {
           position: absolute;
-          bottom: 10px;
-          left: 10px;
+          bottom: 0.625rem;
+          left: 0.625rem;
           display: none;
           gap: 0.5rem;
         }
@@ -285,11 +285,11 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
 
         .play-button {
           position: relative;
-          width: 80px;
-          height: 80px;
+          width: 5rem;
+          height: 5rem;
           border-radius: 50%;
           background: transparent;
-          border: 3px solid rgba(255, 255, 255, 0.9);
+          border: 0.1875rem solid rgba(255, 255, 255, 0.9);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -308,9 +308,9 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
           width: 0;
           height: 0;
           border-style: solid;
-          border-width: 12px 0 12px 20px;
+          border-width: 0.75rem 0 0.75rem 1.25rem;
           border-color: transparent transparent transparent rgba(255, 255, 255, 0.9);
-          margin-left: 4px;
+          margin-left: 0.25rem;
         }
 
         .play-button:hover::after {
@@ -319,8 +319,8 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
 
         .action-btn {
           position: absolute;
-          width: 22px;
-          height: 22px;
+          width: 1.375rem;
+          height: 1.375rem;
           background: rgba(0,0,0,0.75);
           color:#fff;
           border:none;
@@ -330,20 +330,20 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
           justify-content:center;
           cursor:pointer;
           z-index:1003;
-          font-size:14px;
+          font-size:0.875rem;
         }
         .help-btn  { display:none; }
 
         .menu-btn {
           position: absolute;
-          top: 12px;
-          left: 12px;
+          top: 0.75rem;
+          left: 0.75rem;
           background: rgba(0,0,0,0.65);
           border: none;
           border-radius: 50%;
           cursor: pointer;
-          width: 20px;
-          height: 20px;
+          width: 1.25rem;
+          height: 1.25rem;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -351,8 +351,8 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
           z-index: 1003;
         }
         .menu-btn svg {
-          width: 18px;
-          height: 18px;
+          width: 1.125rem;
+          height: 1.125rem;
         }
         .menu {
           position: absolute;
@@ -361,9 +361,9 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
           display: none;
           flex-direction: column;
           background:#fff;
-          border:1px solid #e2e2e2;
+          border:0.0625rem solid #e2e2e2;
           border-radius:0.5rem;
-          box-shadow:0 4px 12px rgba(0,0,0,0.15);
+          box-shadow:0 0.25rem 0.75rem rgba(0,0,0,0.15);
           overflow:hidden;
         }
         .menu.visible { display:flex; }
@@ -392,11 +392,11 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
         /* --- Call action icon buttons --- */
         .end-call-btn, .mic-btn {
           opacity: 0;
-          transform: translateY(24px);
+          transform: translateY(1.5rem);
           transition: opacity 2.6s ease, transform 2.6s ease;
           position: absolute;
-          width: 40px;
-          height: 40px;
+          width: 2.5rem;
+          height: 2.5rem;
           border: none;
           border-radius: 50%;
           display: flex;
@@ -406,11 +406,11 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
           cursor: pointer;
           z-index: 1004;
         }
-        .end-call-btn { background: #9b2c2c; right: 12px; bottom: 6px; }
+        .end-call-btn { background: #9b2c2c; right: 0.75rem; bottom: 0.375rem; }
         .end-call-btn:hover {
           filter: hue-rotate(-10deg) brightness(1.05);
         }
-        .mic-btn { background:#300040; left: 12px; bottom: 6px; pointer-events:none; cursor:default; }
+        .mic-btn { background:#300040; left: 0.75rem; bottom: 0.375rem; pointer-events:none; cursor:default; }
         .mic-btn img { filter: invert(1); }
 
         /* Fade-in when connected */
@@ -437,21 +437,21 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
           pointer-events: none;
         }
         .mic-btn .ring-1 {
-          width: 40px;
-          height: 40px;
-          border: 1px solid rgba(255, 255, 255, 0.53);
+          width: 2.5rem;
+          height: 2.5rem;
+          border: 0.0625rem solid rgba(255, 255, 255, 0.53);
           animation: micRingSpin1 4s linear infinite;
         }
         .mic-btn .ring-2 {
-          width: 44px;
-          height: 44px;
-          border: 1px solid rgba(255, 255, 255, 0.51);
+          width: 2.75rem;
+          height: 2.75rem;
+          border: 0.0625rem solid rgba(255, 255, 255, 0.51);
           animation: micRingSpin2 2s linear infinite reverse;
         }
         .mic-btn .ring-3 {
-          width: 45px;
-          height: 45px;
-          border: 1px solid rgba(255, 255, 255, 0.51);
+          width: 2.8125rem;
+          height: 2.8125rem;
+          border: 0.0625rem solid rgba(255, 255, 255, 0.51);
           animation: micRingSpin3 3s linear infinite;
         }
         @keyframes micRingSpin1 {
@@ -478,7 +478,7 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
         /* Prompt shimmering instruction text */
         .prompt-text {
           position: absolute;
-          bottom: 6px;
+          bottom: 0.375rem;
           left: 50%;
           transform: translateX(-50%);
           font-size: 0.85rem;
@@ -488,7 +488,7 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
           background-size: 200% 100%;
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          text-shadow: 0 0 3px rgba(248,216,255,0.4);
+          text-shadow: 0 0 0.1875rem rgba(248,216,255,0.4);
           animation: shimmer 3s linear infinite;
           white-space: nowrap;
           opacity: 0;
@@ -505,9 +505,9 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
           animation: blurSwitch 1.3s ease-in-out;
         }
         @keyframes blurSwitch {
-          0%   { filter: blur(0px); opacity: 1; }
-          50%  { filter: blur(4px); opacity: 0; }
-          100% { filter: blur(0px); opacity: 1; }
+          0%   { filter: blur(0); opacity: 1; }
+          50%  { filter: blur(0.25rem); opacity: 0; }
+          100% { filter: blur(0); opacity: 1; }
         }
       `;
       this.shadowRoot.appendChild(promptStyle);
@@ -519,12 +519,12 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
           position: absolute;
           bottom: 0;
           left: 50%;
-          height: 2px;
+          height: 0.125rem;
           width: 80%;
           transform-origin: center;
           transform: translateX(-50%) scaleX(0.3); /* minimum 30% */
           background: rgba(255,255,255,0.9);
-          box-shadow: 0 0 4px rgba(255,255,255,0.7);
+          box-shadow: 0 0 0.25rem rgba(255,255,255,0.7);
           opacity:0;
           transition: opacity 0.4s ease-out;
           z-index: 1005;
@@ -538,11 +538,11 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
       barsSpinnerStyle.textContent = `
         .bars-spinner {
           position: absolute;
-          bottom: 20px;
+          bottom: 1.25rem;
           left: 50%;
           transform: translateX(-50%);
-          width: 24px;
-          height: 24px;
+          width: 1.5rem;
+          height: 1.5rem;
           opacity: 0;
           transition: opacity 0.3s ease;
           z-index: 1006;
@@ -552,7 +552,7 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
           opacity: 1;
         }
         .bars-spinner svg {
-          filter: drop-shadow(0 0 2px rgba(67, 39, 39, 0.8)) drop-shadow(0 0 4px rgba(255, 255, 255, 0.6));
+          filter: drop-shadow(0 0 0.125rem rgba(67, 39, 39, 0.8)) drop-shadow(0 0 0.25rem rgba(255, 255, 255, 0.6));
         }
         .spinner-bar {
           animation: spinner-bars-animation 1.4s linear infinite;
@@ -567,8 +567,8 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
         }
         @keyframes spinner-bars-animation {
           0% {
-            y: 1px;
-            height: 22px;
+            y: 0.0625rem;
+            height: 1.375rem;
             fill: #ffffff;
             opacity: 1;
           }
@@ -577,8 +577,8 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
             opacity: 0.9;
           }
           50% {
-            y: 3px;
-            height: 18px;
+            y: 0.1875rem;
+            height: 1.125rem;
             fill: #888888;
             opacity: 0.7;
           }
@@ -587,14 +587,14 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
             opacity: 0.4;
           }
           93.75% {
-            y: 5px;
-            height: 14px;
+            y: 0.3125rem;
+            height: 0.875rem;
             fill: #000000;
             opacity: 0.2;
           }
           100% {
-            y: 1px;
-            height: 22px;
+            y: 0.0625rem;
+            height: 1.375rem;
             fill: #ffffff;
             opacity: 1;
           }
@@ -605,7 +605,7 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
       const actionAnimStyle = document.createElement("style");
       actionAnimStyle.textContent = `
         @keyframes fadeSlideUp {
-          0%   { opacity: 0; transform: translateY(24px); }
+          0%   { opacity: 0; transform: translateY(1.5rem); }
           100% { opacity: 1; transform: translateY(0); }
         }
         .container.connected .end-call-btn,
@@ -629,7 +629,7 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
       this._barsSpinner = document.createElement("div");
       this._barsSpinner.className = "bars-spinner";
       this._barsSpinner.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <svg xmlns="http://www.w3.org/2000/svg" width="1.5rem" height="1.5rem" viewBox="0 0 24 24">
           <title>Loading...</title>
           <rect
             class="spinner-bar"
@@ -692,7 +692,7 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
 
       // End call circular icon button
       this._endBtn = document.createElement("button");
-      this._endBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92V23a2 2 0 0 1-2.18 2A19.78 19.78 0 0 1 1 4.18 2 2 0 0 1 3 2h6.09a1 1 0 0 1 1 .75l1.2 5.17a1 1 0 0 1-.29.95l-2.12 2.12a16 16 0 0 0 6.88 6.88l2.12-2.12a1 1 0 0 1 .95-.29l5.17 1.2a1 1 0 0 1 .75 1z"/></svg>`;
+      this._endBtn.innerHTML = `<svg width="1.125rem" height="1.125rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92V23a2 2 0 0 1-2.18 2A19.78 19.78 0 0 1 1 4.18 2 2 0 0 1 3 2h6.09a1 1 0 0 1 1 .75l1.2 5.17a1 1 0 0 1-.29.95l-2.12 2.12a16 16 0 0 0 6.88 6.88l2.12-2.12a1 1 0 0 1 .95-.29l5.17 1.2a1 1 0 0 1 .75 1z"/></svg>`;
       this._endBtn.style.display = "none";
       this._endBtn.className = "end-call-btn";
       this._container.appendChild(this._endBtn);
@@ -722,7 +722,7 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
       // Menu button (question mark icon)
       this._menuBtn = document.createElement("button");
       this._menuBtn.className = "menu-btn";
-      this._menuBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9 9a3 3 0 0 1 6 0c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
+      this._menuBtn.innerHTML = `<svg width="1.125rem" height="1.125rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9 9a3 3 0 0 1 6 0c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
       this._container.appendChild(this._menuBtn);
 
       // Menu
