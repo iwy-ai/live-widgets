@@ -424,8 +424,8 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
           transform: translateY(1.5rem);
           transition: opacity 2.6s ease, transform 2.6s ease;
           position: absolute;
-          width: 2.5rem;
-          height: 2.5rem;
+          width: 3rem;
+          height: 3rem;
           border: none;
           border-radius: 50%;
           display: flex;
@@ -466,20 +466,20 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
           pointer-events: none;
         }
         .mic-btn .ring-1 {
-          width: 2.5rem;
-          height: 2.5rem;
+          width: 3rem;
+          height: 3rem;
           border: 0.0625rem solid rgba(255, 255, 255, 0.53);
           animation: micRingSpin1 4s linear infinite;
         }
         .mic-btn .ring-2 {
-          width: 2.75rem;
-          height: 2.75rem;
+          width: 3.25rem;
+          height: 3.25rem;
           border: 0.0625rem solid rgba(255, 255, 255, 0.51);
           animation: micRingSpin2 2s linear infinite reverse;
         }
         .mic-btn .ring-3 {
-          width: 2.8125rem;
-          height: 2.8125rem;
+          width: 3.3125rem;
+          height: 3.3125rem;
           border: 0.0625rem solid rgba(255, 255, 255, 0.51);
           animation: micRingSpin3 3s linear infinite;
         }
@@ -835,6 +835,11 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
               console.log("Bot connected:", participant);
               // Hide spinner when bot joins
               this._barsSpinner.classList.remove("visible");
+
+              // Show end call and mic buttons immediately when bot connects
+              this._container.classList.add("connected");
+              this._endBtn.style.display = "flex";
+              this._micBtn.style.display = "flex";
 
               // Show text carousel with 4s delay and fade-in transition
               if (this._promptTimeout) clearTimeout(this._promptTimeout);
