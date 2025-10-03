@@ -1,3 +1,18 @@
+# [1.1.0](https://github.com/iwy-ai/live-widgets/compare/v1.0.0...v1.1.0) (2025-10-03)
+
+
+### Bug Fixes
+
+* "Listening..." not unintentionally displayed ([be084b0](https://github.com/iwy-ai/live-widgets/commit/be084b0031aa2f70424f125d0f5a4fc2e04ece9a))
+* improve top & bottom shadow gradient ([2cf56d7](https://github.com/iwy-ai/live-widgets/commit/2cf56d751f5dc8726a8cebd985003049a16a30a4))
+* tweak ui: dropdown + bottom shadow ([4fb376f](https://github.com/iwy-ai/live-widgets/commit/4fb376fd0743126b806a46d5fe597241fd0c3bd6))
+
+
+### Features
+
+* add back buttons: "end call" and mic ([6af796e](https://github.com/iwy-ai/live-widgets/commit/6af796e7ec7dc041d050a6ddbffe1f6cc54046ad))
+* added on-hover start call ([aa33d33](https://github.com/iwy-ai/live-widgets/commit/aa33d33a6ff4329f0877f691809310d7e27cd91f))
+
 # 1.0.0 (2025-10-03)
 
 
