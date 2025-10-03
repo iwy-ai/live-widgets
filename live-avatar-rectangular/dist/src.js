@@ -127,12 +127,16 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
       this._language = this.getAttribute("language") || "en";
 
       // Button listeners
-      this._startBtn.addEventListener("click", () => this._startCall());
       this._endBtn.addEventListener("click", () => this._stopCall());
 
-      // Click anywhere on container to start call
-      this._container.addEventListener("click", (ev) => {
-        if (this._state.connected || this._state.connecting) return; // already connected/connecting
+      // Play button click to start call
+      this._playButton.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (this._state.connected || this._state.connecting) return;
+
+        // Hide play overlay immediately on click
+        this._playOverlay.classList.add("hidden");
+        this._playOverlay.style.opacity = "0";
 
         this._setStatus("Connecting...", false);
         this._startCall();
@@ -151,7 +155,6 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
 
     disconnectedCallback() {
       this._stopCall();
-      this._startBtn.removeEventListener("click", this._startCall);
       this._endBtn.removeEventListener("click", this._stopCall);
 
       // Clean up prompt switching interval
@@ -253,23 +256,66 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
           position: absolute;
           bottom: 10px;
           left: 10px;
-          display: flex;
+          display: none;
           gap: 0.5rem;
         }
 
-        .btn {
-          padding: 0.15rem 1.4rem;
-          font-size: 0.85rem;
-          font-weight: 400;
-          border: none;
-          border-radius: 9999px;
-          cursor: pointer;
-          transition: background-color 0.2s;
+        /* Play button overlay */
+        .play-overlay {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0;
+          transition: opacity 0.2s ease;
+          pointer-events: none;
+          z-index: 1002;
         }
-        .btn.primary { background:#300040; color:#fff; }
-        .btn.primary:hover { background:#1e0024; }
-        .btn.danger { background:#c53030; color:#fff; }
-        .btn.danger:hover { background:#9b2c2c; }
+
+        .container:hover .play-overlay:not(.hidden) {
+          opacity: 1;
+        }
+
+        .play-overlay-blur {
+          position: absolute;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.4);
+        }
+
+        .play-button {
+          position: relative;
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          background: transparent;
+          border: 3px solid rgba(255, 255, 255, 0.9);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          pointer-events: all;
+          transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .play-button:hover {
+          transform: scale(1.1);
+          border-color: rgba(255, 255, 255, 1);
+        }
+
+        .play-button::after {
+          content: '';
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: 12px 0 12px 20px;
+          border-color: transparent transparent transparent rgba(255, 255, 255, 0.9);
+          margin-left: 4px;
+        }
+
+        .play-button:hover::after {
+          border-color: transparent transparent transparent rgba(255, 255, 255, 1);
+        }
 
         .action-btn {
           position: absolute;
@@ -617,6 +663,20 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
       this._createPlaceholder();
       this._container.appendChild(this._placeholder);
 
+      // Play overlay (shown on hover before call starts)
+      this._playOverlay = document.createElement("div");
+      this._playOverlay.className = "play-overlay";
+
+      const playBlur = document.createElement("div");
+      playBlur.className = "play-overlay-blur";
+      this._playOverlay.appendChild(playBlur);
+
+      this._playButton = document.createElement("div");
+      this._playButton.className = "play-button";
+      this._playOverlay.appendChild(this._playButton);
+
+      this._container.appendChild(this._playOverlay);
+
       // Video element
       this._video = document.createElement("video");
       this._video.setAttribute("playsinline", "");
@@ -629,16 +689,6 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
       this._audio.setAttribute("autoplay", "");
       this._audio.style.display = "none";
       this._root.appendChild(this._audio);
-
-      // Controls
-      this._controls = document.createElement("div");
-      this._controls.className = "controls";
-      this._container.appendChild(this._controls);
-
-      this._startBtn = document.createElement("button");
-      this._startBtn.textContent = "Start Call";
-      this._startBtn.className = "btn primary";
-      this._controls.appendChild(this._startBtn);
 
       // End call circular icon button
       this._endBtn = document.createElement("button");
@@ -717,7 +767,6 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
         }, { once: true });
       }
       this._state.connecting = true;
-      this._startBtn.disabled = true;
 
       try {
         // Request session from backend
@@ -833,7 +882,6 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
       }, 35000);
 
       this._container.classList.add("connected");
-      this._startBtn.style.display = "none";
       this._endBtn.style.display = "flex";
       this._micBtn.style.display = "flex";
 
@@ -948,9 +996,7 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
       if (this._fadeTimeout) { clearTimeout(this._fadeTimeout); this._fadeTimeout = null; }
 
       this._container.classList.remove("connected");
-      this._startBtn.style.display = "block";
-      this._startBtn.disabled = false;
-      this._startBtn.textContent = "Start Call";
+      this._playOverlay.classList.remove("hidden");
       this._endBtn.style.display = "none";
       if (this._micBtn) this._micBtn.style.display = "none";
       if (this._promptTimeout) { clearTimeout(this._promptTimeout); this._promptTimeout = null; }
@@ -972,8 +1018,10 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
 
     _resetConnectingState() {
       this._state.connecting = false;
-      this._startBtn.disabled = false;
-      this._startBtn.textContent = "Start Call";
+      // Show play overlay again if needed
+      if (!this._state.connected) {
+        this._playOverlay.classList.remove("hidden");
+      }
     }
 
     /* ---------------------------------------------------------
