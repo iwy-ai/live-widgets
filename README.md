@@ -1,6 +1,6 @@
 # @iwy/live-widgets
 
-Library of embeddable AI avatar widgets for live conversational video chat. This package allows you to easily embed interactive AI avatars on any website.
+Library of embeddable AI avatar widgets for live conversational video chat. This package allows you to easily embed interactive AI avatars on any website with just a few lines of code.
 
 ## Installation
 
