@@ -22,7 +22,7 @@ npm install @iwy/live-widgets
 
 ## Usage
 
-### Basic HTML Usage (CDN)
+### Basic HTML Usage
 
 ```html
 <!DOCTYPE html>
