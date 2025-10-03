@@ -128,6 +128,7 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
 
       // Button listeners
       this._endBtn.addEventListener("click", () => this._stopCall());
+      this._micBtn.addEventListener("click", () => this._toggleMic());
 
       // Play button click to start call
       this._playButton.addEventListener("click", (e) => {
@@ -439,8 +440,24 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
         .end-call-btn:hover {
           filter: hue-rotate(-10deg) brightness(1.05);
         }
-        .mic-btn { background:#300040; left: 0.75rem; bottom: 0.375rem; pointer-events:none; cursor:default; }
-        .mic-btn img { filter: invert(1); }
+        .mic-btn {
+          background: #4a4a4a;
+          left: 0.75rem;
+          bottom: 0.375rem;
+          pointer-events: auto;
+          cursor: pointer;
+          transition: background 0.3s ease;
+        }
+        .mic-btn:hover {
+          background: #5a5a5a;
+        }
+        .mic-btn.disabled {
+          background: #3a3a3a;
+        }
+        .mic-btn svg {
+          width: 1.25rem;
+          height: 1.25rem;
+        }
 
         /* Fade-in when connected */
         .container.connected .end-call-btn,
@@ -470,18 +487,27 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
           height: 3rem;
           border: 0.0625rem solid rgba(255, 255, 255, 0.53);
           animation: micRingSpin1 4s linear infinite;
+          opacity: 1;
+          transition: opacity 0.3s ease;
         }
         .mic-btn .ring-2 {
           width: 3.25rem;
           height: 3.25rem;
           border: 0.0625rem solid rgba(255, 255, 255, 0.51);
           animation: micRingSpin2 2s linear infinite reverse;
+          opacity: 1;
+          transition: opacity 0.3s ease;
         }
         .mic-btn .ring-3 {
           width: 3.3125rem;
           height: 3.3125rem;
           border: 0.0625rem solid rgba(255, 255, 255, 0.51);
           animation: micRingSpin3 3s linear infinite;
+          opacity: 1;
+          transition: opacity 0.3s ease;
+        }
+        .mic-btn.disabled .mic-ring {
+          opacity: 0;
         }
         @keyframes micRingSpin1 {
           0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
@@ -726,9 +752,24 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
       this._endBtn.className = "end-call-btn";
       this._container.appendChild(this._endBtn);
 
-      // Microphone indicator icon button
+      // Microphone toggle button
       this._micBtn = document.createElement("button");
-      this._micBtn.innerHTML = `<img src="https://talk.iwy.ai/media/circular-pattern.png" alt="pattern" style="width:100%;height:100%;object-fit:contain;" />`;
+      this._micEnabled = true; // Mic enabled by default
+      this._micBtn.innerHTML = `
+        <svg class="mic-icon-enabled" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+          <line x1="12" y1="19" x2="12" y2="23"></line>
+          <line x1="8" y1="23" x2="16" y2="23"></line>
+        </svg>
+        <svg class="mic-icon-disabled" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="1" y1="1" x2="23" y2="23"></line>
+          <path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"></path>
+          <path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23"></path>
+          <line x1="12" y1="19" x2="12" y2="23"></line>
+          <line x1="8" y1="23" x2="16" y2="23"></line>
+        </svg>
+      `;
       this._micBtn.style.display = "none";
       this._micBtn.className = "mic-btn";
       this._container.appendChild(this._micBtn);
@@ -913,6 +954,36 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
       } catch (_) {}
       this._cleanupCall();
       this._updateUIDisconnected();
+    }
+
+    _toggleMic() {
+      if (!this._pcClient) return;
+
+      this._micEnabled = !this._micEnabled;
+
+      // Toggle visual state
+      const enabledIcon = this._micBtn.querySelector('.mic-icon-enabled');
+      const disabledIcon = this._micBtn.querySelector('.mic-icon-disabled');
+
+      if (this._micEnabled) {
+        this._micBtn.classList.remove('disabled');
+        enabledIcon.style.display = 'block';
+        disabledIcon.style.display = 'none';
+      } else {
+        this._micBtn.classList.add('disabled');
+        enabledIcon.style.display = 'none';
+        disabledIcon.style.display = 'block';
+      }
+
+      // Toggle microphone at track level (mute/unmute without re-requesting permissions)
+      try {
+        const tracks = this._pcClient.tracks();
+        if (tracks?.local?.audio) {
+          tracks.local.audio.enabled = this._micEnabled;
+        }
+      } catch (e) {
+        console.error('Error toggling microphone:', e);
+      }
     }
 
     _updateUIConnected() {
