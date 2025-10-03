@@ -840,6 +840,8 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
               if (this._promptTimeout) clearTimeout(this._promptTimeout);
               this._promptText.style.transition = "opacity 0.4s ease-out";
               this._promptTimeout = setTimeout(() => {
+                // Set the text content now (when session has started)
+                this._promptText.textContent = this._promptMessages[0];
                 this._promptText.style.display = "block";
                 this._promptText.style.opacity = "1";
               }, 4000);
@@ -1197,8 +1199,8 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
       const config = LANGUAGE_CONFIG[this._language] || LANGUAGE_CONFIG.en;
       this._promptMessages = [config.listening, config.talkToInterrupt];
 
-      // Update current text if prompt text element exists
-      if (this._promptText) {
+      // Update current text only if session is connected (don't show text before session starts)
+      if (this._promptText && this._state.connected) {
         this._promptText.textContent = this._promptMessages[0];
       }
     }
@@ -1210,7 +1212,7 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
 
       let promptIdx = 0;
       this._promptSwitchInterval = setInterval(() => {
-        if (!this._promptMessages) return;
+        if (!this._promptMessages || !this._state.connected) return;
 
         // trigger blur animation
         this._promptText.classList.add("text-switch");
