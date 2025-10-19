@@ -1,12 +1,29 @@
 {
   "name": "@iwy/live-widgets",
   "version": "1.1.1",
-  "description": "Embeddable AI avatar widget for live video chat",
+  "description": "Embeddable AI avatar and audio visualizer widgets for live conversations",
   "type": "module",
   "main": "dist/live-avatar.js",
   "module": "dist/live-avatar.esm.js",
   "unpkg": "dist/live-avatar.min.js",
   "jsdelivr": "dist/live-avatar.min.js",
+  "exports": {
+    ".": {
+      "import": "./dist/live-avatar.esm.js",
+      "require": "./dist/live-avatar.js",
+      "default": "./dist/live-avatar.min.js"
+    },
+    "./audio-visualizer": {
+      "import": "./dist/audio-visualizer.esm.js",
+      "require": "./dist/audio-visualizer.js",
+      "default": "./dist/audio-visualizer.min.js"
+    },
+    "./rectangular": {
+      "import": "./dist/live-avatar-rectangular.esm.js",
+      "require": "./dist/live-avatar-rectangular.js",
+      "default": "./dist/live-avatar-rectangular.min.js"
+    }
+  },
   "files": [
     "dist/"
   ],
@@ -19,6 +36,10 @@
     "avatar",
     "widget",
     "video-chat",
+    "audio-visualizer",
+    "webgl",
+    "plasma",
+    "pipecat",
     "webcomponent",
     "embedding"
   ],
@@ -43,6 +64,7 @@
   },
   "dependencies": {
     "@pipecat-ai/client-js": "^1.4.0",
-    "@pipecat-ai/daily-transport": "^1.4.0"
+    "@pipecat-ai/daily-transport": "^1.4.0",
+    "three": "^0.180.0"
   }
 }

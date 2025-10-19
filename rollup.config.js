@@ -118,5 +118,63 @@ export default [
       }),
       commonjs()
     ]
+  },
+  // Audio Visualizer - UMD build for CDN usage (with Pipecat and Three.js bundled)
+  {
+    input: 'audio-visualizer/dist/src.js',
+    output: {
+      file: 'dist/audio-visualizer.min.js',
+      format: 'iife',
+      name: 'AudioVisualizer',
+      banner: '/* @iwy/audio-visualizer v1.0.0 | MIT License | https://www.iwy.ai */'
+    },
+    plugins: [
+      resolve({
+        browser: true,
+        preferBuiltins: false
+      }),
+      commonjs(),
+      terser({
+        compress: {
+          drop_console: false
+        },
+        format: {
+          comments: /^!/
+        }
+      })
+    ]
+  },
+  // Audio Visualizer - ESM build (with Pipecat and Three.js bundled)
+  {
+    input: 'audio-visualizer/dist/src.js',
+    output: {
+      file: 'dist/audio-visualizer.esm.js',
+      format: 'es',
+      banner: '/* @iwy/audio-visualizer v1.0.0 | MIT License | https://www.iwy.ai */'
+    },
+    plugins: [
+      resolve({
+        browser: true,
+        preferBuiltins: false
+      }),
+      commonjs()
+    ]
+  },
+  // Audio Visualizer - CommonJS build (with Pipecat and Three.js bundled)
+  {
+    input: 'audio-visualizer/dist/src.js',
+    output: {
+      file: 'dist/audio-visualizer.js',
+      format: 'cjs',
+      banner: '/* @iwy/audio-visualizer v1.0.0 | MIT License | https://www.iwy.ai */',
+      exports: 'auto'
+    },
+    plugins: [
+      resolve({
+        browser: true,
+        preferBuiltins: false
+      }),
+      commonjs()
+    ]
   }
 ];
