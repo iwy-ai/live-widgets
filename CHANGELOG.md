@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/iwy-ai/live-widgets/compare/v1.1.0...v1.2.0) (2025-10-19)
+
+
+### Features
+
+* Add audio-visualizer component with WebGL plasma visualization
+* Organize all components into dedicated folders with individual READMEs and examples
+* Streamline main README with component comparison table and unified documentation
+
 # [1.1.0](https://github.com/iwy-ai/live-widgets/compare/v1.0.0...v1.1.0) (2025-10-03)
 
 

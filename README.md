@@ -1,37 +1,39 @@
 # @iwy/live-widgets
 
-Library of embeddable AI avatar widgets for live conversational video chat. This package allows you to easily embed interactive AI avatars on any website with just a few lines of code.
+Embeddable AI avatar and audio visualizer widgets for live conversations. This package allows you to easily embed interactive AI avatars and audio visualizations on any website with just a few lines of code.
 
-## Widget Types
+## Components
 
-This package provides two types of avatar widgets:
+This package provides three interactive components for Pipecat voice AI applications:
 
-- **`<live-avatar>`** - A floating bubble widget that positions itself in the bottom-right corner of the page
-- **`<live-avatar-rectangular>`** - A rectangular widget designed to be embedded inside a specific div or container
+| Component | Description | Use Case |
+|-----------|-------------|----------|
+| **[live-avatar](./live-avatar/README.md)** | Circular floating bubble in bottom-right corner | Non-intrusive avatar widget similar to chat bubbles |
+| **[live-avatar-rectangular](./live-avatar-rectangular/README.md)** | Rectangular video container that fills parent div | Embedded video chat experience in your page layout |
+| **[audio-visualizer](./audio-visualizer/README.md)** | Audio-only WebGL plasma visualizer | Audio-first experiences without video streaming |
 
-## Installation
+Click any component name above to view detailed documentation, usage examples, and configuration options.
 
-### Via npm
+## Quick Start
+
+All components follow the same simple pattern: import the component and specify your `agentid` (required), along with any optional component-specific parameters.
+
+### Installation
+
+#### Via npm
 
 ```bash
 npm install @iwy/live-widgets
 ```
 
-### Via CDN
+#### Via CDN
 
 ```html
-<!-- For floating bubble widget -->
+<!-- Example: Load the live-avatar component -->
 <script src="https://unpkg.com/@iwy/live-widgets@latest/dist/live-avatar.min.js"></script>
-
-<!-- For rectangular widget -->
-<script src="https://unpkg.com/@iwy/live-widgets@latest/dist/live-avatar-rectangular.min.js"></script>
 ```
 
-## Usage
-
-### Floating Bubble Widget
-
-The floating bubble widget automatically positions itself in the bottom-right corner:
+### Basic Usage Example
 
 ```html
 <!DOCTYPE html>
@@ -40,126 +42,97 @@ The floating bubble widget automatically positions itself in the bottom-right co
     <title>My Website</title>
 </head>
 <body>
-    <h1>Welcome to my website</h1>
+    <h1>Welcome</h1>
 
-    <!-- Floating bubble widget -->
-    <live-avatar agentid="your-agent-id-here"></live-avatar>
+    <!-- Use the component with required agentid attribute -->
+    <live-avatar agentid="your-agent-id"></live-avatar>
+
+    <!-- Load the component script -->
     <script src="https://unpkg.com/@iwy/live-widgets@latest/dist/live-avatar.min.js"></script>
 </body>
 </html>
 ```
 
-### Rectangular Widget
+### React/TypeScript
 
-The rectangular widget is designed to be embedded inside a container div:
-
-```html
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Website</title>
-    <style>
-        .avatar-container {
-            width: 600px;
-            height: 600px;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        live-avatar-rectangular {
-            display: block;
-            width: 100%;
-            height: 100%;
-        }
-    </style>
-</head>
-<body>
-    <h1>Welcome to my website</h1>
-    
-    <div class="avatar-container">
-        <live-avatar-rectangular 
-            agentid="your-agent-id-here"
-            placeholder-src="https://talk.iwy.ai/assets/plc_grey_purple_2_loop.webp"
-            language="en">
-        </live-avatar-rectangular>
-    </div>
-    
-    <script src="https://unpkg.com/@iwy/live-widgets@latest/dist/live-avatar-rectangular.min.js"></script>
-</body>
-</html>
-```
-
-### ES Module Usage
-
-```javascript
+```tsx
 import '@iwy/live-widgets';
 
-// Now you can use the <live-avatar> custom element in your HTML
-```
-
-### React/Vue/Angular Usage
-
-Since this is a web component, it works with any framework:
-
-```jsx
-// React
 function App() {
   return (
     <div>
-      <live-avatar agentid="your-agent-id-here"></live-avatar>
+      <live-avatar agentid="your-agent-id">
+      </live-avatar>
     </div>
   );
 }
 ```
 
-## Configuration
-
-### Common Attributes
-
-Both widgets accept the following attributes:
-
-- `agentid` (required): Your agent ID from iwy.ai
-- `placeholder-src` (optional): URL to a placeholder image/animation that displays in a loop (could be webp or gif, or just a static image) before the avatar loads
-- `language` (optional): Language code for the avatar (Currently only supports "en" and "no")
-
-
-### Custom Endpoint Example
-
-```html
-<!-- Floating bubble widget -->
-<live-avatar
-  agentid="your-agent-id">
-</live-avatar>
-
-<!-- Rectangular widget -->
-<live-avatar-rectangular
-  agentid="your-agent-id"
-  placeholder-src="https://talk.iwy.ai/assets/plc_grey_purple_2_loop.webp"
-  language="en">
-</live-avatar-rectangular>
-```
+**Note:** Each component may have additional optional attributes specific to its functionality. See the individual component documentation linked in the table above for complete configuration options.
 
 ## Features
 
-- ✨ Two widget types: floating bubble and embeddable rectangular
-- 📱 Responsive design (scales on mobile)
-- 🎥 Live video chat with AI agents
-- 🎤 Real-time audio visualization (microphone access only)
-- 🎛️ Interactive controls and status indicators
-- 🎨 Smooth animations and transitions
-- 🔧 Customizable via CSS custom properties
+- **Several Component Types** - Floating bubble, rectangular container, audio visualizer ...
+- **Pipecat Integration** - Built-in support for Pipecat Client SDK with Daily transport
+- **Easy Integration** - Web components work with any framework (React, Vue, Angular, etc.)
+- **Responsive Design** - Components adapt to their containers
+- **Real-time Audio** - Microphone visualization and audio reactivity
+- **WebGL Effects** - Hardware-accelerated plasma visualization
+- **Multi-language** - Built-in English and Norwegian support
+- **Customizable** - Configure endpoints, styling, and behavior
 
 ## Browser Support
 
-- Chrome 60+
-- Firefox 63+
-- Safari 12+
-- Edge 79+
+| Browser | Support |
+|---------|---------|
+| Chrome/Edge | ✅ Full support (60+) |
+| Firefox | ✅ Full support (63+) |
+| Safari | ✅ Full support (12+, iOS 11+) |
+
+**Requirements:**
+- WebRTC
+- Web Audio API
+- WebGL 1.0+ (for audio-visualizer)
+
+## Documentation
+
+For detailed documentation on each component, see:
+
+- **[Live Avatar](./live-avatar/README.md)** - Floating bubble widget
+- **[Live Avatar Rectangular](./live-avatar-rectangular/README.md)** - Rectangular container widget
+- **[Audio Visualizer](./audio-visualizer/README.md)** - Audio-only visualizer
+
+## Development
+
+```bash
+# Clone repository
+git clone https://github.com/iwy-ai/live-widgets.git
+cd live-widgets
+
+# Install dependencies
+npm install
+
+# Build all components
+npm run build
+```
 
 ## License
 
 MIT License - see [LICENSE](LICENSE) file for details.
 
+## Links
+
+- [Website](https://www.iwy.ai)
+- [Issues](https://github.com/iwy-ai/live-widgets/issues)
+- [Documentation](https://docs.iwy.ai)
+
 ## Support
 
 For support and questions, visit [iwy.ai/contact](https://www.iwy.ai/contact)
+
+## Credits
+
+Built by [iwy.ai](https://www.iwy.ai) with:
+- [Pipecat](https://github.com/pipecat-ai/pipecat)
+- [Three.js](https://threejs.org/)
+- [Daily.co](https://daily.co/)

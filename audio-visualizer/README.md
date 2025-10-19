@@ -4,11 +4,11 @@ A lightweight, embeddable audio visualizer with WebGL-powered plasma effects tha
 
 ## Features
 
-- 🎨 **WebGL Plasma Visualization** - Animated plasma effects using Three.js
-- 🎤 **Real-time Audio Reactivity** - Responds to microphone input dynamically
-- 📦 **Easy Integration** - Simple web component that fills its container
-- 🔌 **Pipecat Ready** - Built-in support for Pipecat Client SDK with Daily transport
-- 📱 **Responsive** - Automatically adapts to container size
+- **WebGL Plasma Visualization** - Animated plasma effects using Three.js
+- **Real-time Audio Reactivity** - Responds to microphone input dynamically
+- **Easy Integration** - Simple web component that fills its container
+- **Pipecat Ready** - Built-in support for Pipecat Client SDK with Daily transport
+- **Responsive** - Automatically adapts to container size
 
 ## Installation
 
