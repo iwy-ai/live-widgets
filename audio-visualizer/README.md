@@ -111,7 +111,7 @@ export class AppComponent {}
 | Attribute | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `agentid` | string | Yes | Your Pipecat agent ID |
-| `data-endpoint` | string | No | Custom session endpoint (default: `https://api.iwy.ai/api/start-agent-session`) |
+| `data-endpoint` | string | No | Custom session endpoint (default: `https://api.iwy.ai/v1/start-agent-session`) |
 
 ## Styling
 

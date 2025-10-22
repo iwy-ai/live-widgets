@@ -50,7 +50,7 @@ import * as THREE from 'three';
 
 (() => {
   // Endpoint that returns { roomUrl, dailyToken }
-  const DEFAULT_SESSION_ENDPOINT = "https://api.iwy.ai/api/start-agent-session";
+  const DEFAULT_SESSION_ENDPOINT = "https://api.iwy.ai/v1/start-agent-session";
 
   /* -------------------------------------------------------------
    *  WebGL Plasma Visualizer

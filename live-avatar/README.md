@@ -124,7 +124,7 @@ export class AppComponent {}
 | Attribute | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
 | `agentid` | string | Yes | - | Your Pipecat agent ID |
-| `data-endpoint` | string | No | `https://api.iwy.ai/api/start-agent-session` | Custom session endpoint |
+| `data-endpoint` | string | No | `https://api.iwy.ai/v1/start-agent-session` | Custom session endpoint |
 | `language` | string | No | `en` | Language for UI text (`en` or `no`) |
 
 Languages currently supported: `en` and `no`

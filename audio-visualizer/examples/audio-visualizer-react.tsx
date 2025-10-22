@@ -34,7 +34,7 @@ interface AudioVisualizerProps {
  */
 export function AudioVisualizer({
   agentId,
-  endpoint = 'https://api.iwy.ai/api/start-agent-session',
+  endpoint = 'https://api.iwy.ai/v1/start-agent-session',
   className
 }: AudioVisualizerProps) {
   return (
@@ -115,7 +115,7 @@ export function AudioVisualizerAdvanced() {
       <audio-visualizer
         ref={visualizerRef as any}
         agentid="demo"
-        data-endpoint="https://api.iwy.ai/api/start-agent-session"
+        data-endpoint="https://api.iwy.ai/v1/start-agent-session"
       />
     </div>
   );

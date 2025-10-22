@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/iwy-ai/live-widgets/compare/v1.2.0...v1.3.0) (2025-10-22)
+
+### Features
+
+* Migrate backend from api.iwy.ai/api/[endpoint] -> api.iwy.ai/v1/[endpoint]
+
+
 # [1.2.0](https://github.com/iwy-ai/live-widgets/compare/v1.1.0...v1.2.0) (2025-10-19)
 
 

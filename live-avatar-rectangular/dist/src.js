@@ -49,7 +49,7 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
 
 (() => {
   // Endpoint that returns { roomUrl, dailyToken }
-  const DEFAULT_SESSION_ENDPOINT = "https://api.iwy.ai/api/start-agent-session";
+  const DEFAULT_SESSION_ENDPOINT = "https://api.iwy.ai/v1/start-agent-session";
 
   // Language configuration for prompt messages
   const LANGUAGE_CONFIG = {
