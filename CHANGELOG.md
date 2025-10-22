@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/iwy-ai/live-widgets/compare/v1.1.0...v1.2.0) (2025-10-22)
+
+
+### Features
+
+* add audio-visualizer component ([a837f45](https://github.com/iwy-ai/live-widgets/commit/a837f451ad3a1d34392d01dce099912291e4ff46))
+
 # [1.3.0](https://github.com/iwy-ai/live-widgets/compare/v1.2.0...v1.3.0) (2025-10-22)
 
 ### Features
