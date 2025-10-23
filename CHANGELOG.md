@@ -1,3 +1,11 @@
+# [1.2.0](https://github.com/iwy-ai/live-widgets/compare/v1.1.0...v1.2.0) (2025-10-23)
+
+
+### Features
+
+* add audio-visualizer component ([a837f45](https://github.com/iwy-ai/live-widgets/commit/a837f451ad3a1d34392d01dce099912291e4ff46))
+* add webrtc rectangular widget ([cf40a6a](https://github.com/iwy-ai/live-widgets/commit/cf40a6ac7529157f5a9006a5244a834170ae03b8))
+
 # [1.3.1](https://github.com/iwy-ai/live-widgets/compare/v1.3.0...v1.3.1) (2025-10-23)
 
 ### Features
