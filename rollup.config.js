@@ -10,7 +10,7 @@ export default [
       file: 'dist/live-avatar.min.js',
       format: 'iife',
       name: 'LiveAvatar',
-      banner: '/* @iwy/live-avatar v1.2.0 | MIT License | https://www.iwy.ai */'
+      banner: '/* @iwy/live-avatar v1.3.1 | MIT License | https://www.iwy.ai */'
     },
     plugins: [
       resolve({
@@ -34,7 +34,7 @@ export default [
     output: {
       file: 'dist/live-avatar.esm.js',
       format: 'es',
-      banner: '/* @iwy/live-avatar v1.2.0 | MIT License | https://www.iwy.ai */'
+      banner: '/* @iwy/live-avatar v1.3.1 | MIT License | https://www.iwy.ai */'
     },
     plugins: [
       resolve({
@@ -50,7 +50,7 @@ export default [
     output: {
       file: 'dist/live-avatar.js',
       format: 'cjs',
-      banner: '/* @iwy/live-avatar v1.2.0 | MIT License | https://www.iwy.ai */',
+      banner: '/* @iwy/live-avatar v1.3.1 | MIT License | https://www.iwy.ai */',
       exports: 'auto'
     },
     plugins: [
@@ -68,7 +68,7 @@ export default [
       file: 'dist/live-avatar-rectangular.min.js',
       format: 'iife',
       name: 'LiveAvatarRectangular',
-      banner: '/* @iwy/live-avatar-rectangular v1.3.0 | MIT License | https://www.iwy.ai */'
+      banner: '/* @iwy/live-avatar-rectangular v1.3.1 | MIT License | https://www.iwy.ai */'
     },
     plugins: [
       resolve({
@@ -92,7 +92,7 @@ export default [
     output: {
       file: 'dist/live-avatar-rectangular.esm.js',
       format: 'es',
-      banner: '/* @iwy/live-avatar-rectangular v1.3.0 | MIT License | https://www.iwy.ai */'
+      banner: '/* @iwy/live-avatar-rectangular v1.3.1 | MIT License | https://www.iwy.ai */'
     },
     plugins: [
       resolve({
@@ -108,7 +108,7 @@ export default [
     output: {
       file: 'dist/live-avatar-rectangular.js',
       format: 'cjs',
-      banner: '/* @iwy/live-avatar-rectangular v1.3.0 | MIT License | https://www.iwy.ai */',
+      banner: '/* @iwy/live-avatar-rectangular v1.3.1 | MIT License | https://www.iwy.ai */',
       exports: 'auto'
     },
     plugins: [
@@ -126,7 +126,7 @@ export default [
       file: 'dist/webrtc-live-avatar-rectangular.min.js',
       format: 'iife',
       name: 'WebRTCLiveAvatarRectangular',
-      banner: '/* @iwy/webrtc-live-avatar-rectangular v1.3.0 | MIT License | https://www.iwy.ai */'
+      banner: '/* @iwy/webrtc-live-avatar-rectangular v1.3.1 | MIT License | https://www.iwy.ai */'
     },
     plugins: [
       resolve({
@@ -150,7 +150,7 @@ export default [
     output: {
       file: 'dist/webrtc-live-avatar-rectangular.esm.js',
       format: 'es',
-      banner: '/* @iwy/webrtc-live-avatar-rectangular v1.3.0 | MIT License | https://www.iwy.ai */'
+      banner: '/* @iwy/webrtc-live-avatar-rectangular v1.3.1 | MIT License | https://www.iwy.ai */'
     },
     plugins: [
       resolve({
@@ -166,7 +166,7 @@ export default [
     output: {
       file: 'dist/webrtc-live-avatar-rectangular.js',
       format: 'cjs',
-      banner: '/* @iwy/webrtc-live-avatar-rectangular v1.3.0 | MIT License | https://www.iwy.ai */',
+      banner: '/* @iwy/webrtc-live-avatar-rectangular v1.3.1 | MIT License | https://www.iwy.ai */',
       exports: 'auto'
     },
     plugins: [
@@ -184,7 +184,7 @@ export default [
       file: 'dist/audio-visualizer.min.js',
       format: 'iife',
       name: 'AudioVisualizer',
-      banner: '/* @iwy/audio-visualizer v1.3.0 | MIT License | https://www.iwy.ai */'
+      banner: '/* @iwy/audio-visualizer v1.3.1 | MIT License | https://www.iwy.ai */'
     },
     plugins: [
       resolve({
@@ -208,7 +208,7 @@ export default [
     output: {
       file: 'dist/audio-visualizer.esm.js',
       format: 'es',
-      banner: '/* @iwy/audio-visualizer v1.3.0 | MIT License | https://www.iwy.ai */'
+      banner: '/* @iwy/audio-visualizer v1.3.1 | MIT License | https://www.iwy.ai */'
     },
     plugins: [
       resolve({
@@ -224,7 +224,7 @@ export default [
     output: {
       file: 'dist/audio-visualizer.js',
       format: 'cjs',
-      banner: '/* @iwy/audio-visualizer v1.3.0 | MIT License | https://www.iwy.ai */',
+      banner: '/* @iwy/audio-visualizer v1.3.1 | MIT License | https://www.iwy.ai */',
       exports: 'auto'
     },
     plugins: [
