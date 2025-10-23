@@ -119,6 +119,64 @@ export default [
       commonjs()
     ]
   },
+  // WebRTC Live Avatar Rectangular - UMD build for CDN usage
+  {
+    input: 'webrtc-live-avatar-rectangular/dist/src.js',
+    output: {
+      file: 'dist/webrtc-live-avatar-rectangular.min.js',
+      format: 'iife',
+      name: 'WebRTCLiveAvatarRectangular',
+      banner: '/* @iwy/webrtc-live-avatar-rectangular v1.3.0 | MIT License | https://www.iwy.ai */'
+    },
+    plugins: [
+      resolve({
+        browser: true,
+        preferBuiltins: false
+      }),
+      commonjs(),
+      terser({
+        compress: {
+          drop_console: false
+        },
+        format: {
+          comments: /^!/
+        }
+      })
+    ]
+  },
+  // WebRTC Live Avatar Rectangular - ESM build
+  {
+    input: 'webrtc-live-avatar-rectangular/dist/src.js',
+    output: {
+      file: 'dist/webrtc-live-avatar-rectangular.esm.js',
+      format: 'es',
+      banner: '/* @iwy/webrtc-live-avatar-rectangular v1.3.0 | MIT License | https://www.iwy.ai */'
+    },
+    plugins: [
+      resolve({
+        browser: true,
+        preferBuiltins: false
+      }),
+      commonjs()
+    ]
+  },
+  // WebRTC Live Avatar Rectangular - CommonJS build
+  {
+    input: 'webrtc-live-avatar-rectangular/dist/src.js',
+    output: {
+      file: 'dist/webrtc-live-avatar-rectangular.js',
+      format: 'cjs',
+      banner: '/* @iwy/webrtc-live-avatar-rectangular v1.3.0 | MIT License | https://www.iwy.ai */',
+      exports: 'auto'
+    },
+    plugins: [
+      resolve({
+        browser: true,
+        preferBuiltins: false
+      }),
+      commonjs()
+    ]
+  },
   // Audio Visualizer - UMD build for CDN usage (with Pipecat and Three.js bundled)
   {
     input: 'audio-visualizer/dist/src.js',

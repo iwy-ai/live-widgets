@@ -8,6 +8,11 @@ yarn-error.log*
 /dist/
 build/
 
+# TypeScript build artifacts (but keep src.js in component dist folders)
+**/*.d.ts
+**/*.d.ts.map
+**/*.js.map
+
 # Environment variables
 .env
 .env.local

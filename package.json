@@ -22,13 +22,20 @@
       "import": "./dist/live-avatar-rectangular.esm.js",
       "require": "./dist/live-avatar-rectangular.js",
       "default": "./dist/live-avatar-rectangular.min.js"
+    },
+    "./webrtc-rectangular": {
+      "import": "./dist/webrtc-live-avatar-rectangular.esm.js",
+      "require": "./dist/webrtc-live-avatar-rectangular.js",
+      "default": "./dist/webrtc-live-avatar-rectangular.min.js"
     }
   },
   "files": [
     "dist/"
   ],
   "scripts": {
+    "dev": "vite",
     "build": "rollup -c",
+    "build:webrtc": "cd webrtc-live-avatar-rectangular && tsc && cd ..",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
@@ -60,7 +67,9 @@
     "@semantic-release/github": "^11.0.6",
     "@semantic-release/npm": "^12.0.2",
     "rollup": "^4.9.0",
-    "semantic-release": "^24.2.9"
+    "semantic-release": "^24.2.9",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.11"
   },
   "dependencies": {
     "@pipecat-ai/client-js": "^1.4.0",
