@@ -1,7 +1,25 @@
 /**
  * Live Avatar Web Component
  * A minimal, reusable web component for WebRTC video streaming with microphone control
+ * 
+ * This is the primary source file - no build step required!
+ * 
+ * Usage:
+ *   <live-avatar agentid="demo" language="en"></live-avatar>
+ * 
+ * Attributes:
+ *   - agentid: Agent identifier
+ *   - language: Language code (e.g., 'en')
+ * 
+ * To customize the WebSocket URL, edit the WEBSOCKET_URL constant below.
  */
+
+// ============================================================================
+// CONFIGURATION - Edit this to change the WebSocket URL
+// ============================================================================
+const WEBSOCKET_URL = 'wss://iwy-ai--wr-start.modal.run/ws';
+// ============================================================================
+
 class LiveAvatarElement extends HTMLElement {
     constructor() {
         super();
@@ -272,12 +290,20 @@ class LiveAvatarElement extends HTMLElement {
     }
     connectWebSocket() {
         return new Promise((resolve, reject) => {
-            const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsUrl = `${wsProtocol}//${window.location.host}/ws/${this.peerId}`;
+            const wsUrl = `${WEBSOCKET_URL}/${this.peerId}`;
+            console.log('[LiveAvatar] Connecting to:', wsUrl);
+            
             this.ws = new WebSocket(wsUrl);
-            this.ws.onopen = () => resolve();
-            this.ws.onerror = (error) => reject(error);
+            this.ws.onopen = () => {
+                console.log('[LiveAvatar] WebSocket connected');
+                resolve();
+            };
+            this.ws.onerror = (error) => {
+                console.error('[LiveAvatar] WebSocket error:', error);
+                reject(error);
+            };
             this.ws.onclose = () => {
+                console.log('[LiveAvatar] WebSocket closed');
                 if (this.connectionActive) {
                     this.disconnect();
                 }
@@ -388,6 +414,6 @@ class LiveAvatarElement extends HTMLElement {
 }
 // Define the custom element
 customElements.define('live-avatar', LiveAvatarElement);
+
 // Export for module usage
 export { LiveAvatarElement };
-//# sourceMappingURL=index.js.map

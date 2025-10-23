@@ -4,11 +4,13 @@ A lightweight, standalone WebRTC video widget for displaying live avatar streams
 
 ## Features
 
+- **Pure JavaScript**: No TypeScript, no build step required!
 - **Pure WebRTC**: Direct peer-to-peer connection without requiring Pipecat or Daily.co dependencies
 - **Minimal**: Standalone web component with no external framework requirements
 - **Responsive**: Adapts to container size with flexible layout
 - **Audio Control**: Built-in microphone mute/unmute functionality
 - **Clean UI**: Modern, minimal interface with customizable styling
+- **Hardcoded WebSocket**: Pre-configured WebSocket URL - no wrapper components needed!
 
 ## Installation
 
@@ -17,6 +19,16 @@ npm install @iwy/live-widgets
 ```
 
 ## Usage
+
+### Simple HTML (Recommended)
+
+The easiest way to use this component is to directly import the JavaScript file:
+
+```html
+<script type="module" src="./dist/src.js"></script>
+
+<live-avatar agentid="your-agent-id" language="en"></live-avatar>
+```
 
 ### As ES Module
 
@@ -36,14 +48,49 @@ npm install @iwy/live-widgets
 <live-avatar agentid="your-agent-id" language="en"></live-avatar>
 ```
 
+### In React/Next.js
+
+No need for wrapper components or monkey-patching! Just use it directly:
+
+```jsx
+'use client'
+
+import { useEffect } from 'react'
+
+export default function AvatarPage() {
+  useEffect(() => {
+    // Dynamically import the component
+    import('@iwy/live-widgets/webrtc-rectangular')
+  }, [])
+
+  return (
+    <div style={{ width: '400px', height: '400px' }}>
+      <live-avatar agentid="demo" language="en" />
+    </div>
+  )
+}
+```
+
 ## Attributes
 
 - `agentid`: The ID of the agent to connect to
 - `language`: Language code (e.g., "en", "es")
 
-## WebSocket Endpoint
+## WebSocket Configuration
 
-The component expects a WebSocket server at `/ws/{peerId}` that handles WebRTC signaling with the following message types:
+The component connects to `wss://iwy-ai--wr-start.modal.run/ws/{peerId}` by default. 
+
+To customize the WebSocket URL, edit the `WEBSOCKET_URL` constant at the top of `dist/src.js`:
+
+```javascript
+// ============================================================================
+// CONFIGURATION - Edit this to change the WebSocket URL
+// ============================================================================
+const WEBSOCKET_URL = 'wss://your-custom-server.com/ws';
+// ============================================================================
+```
+
+The WebSocket server should handle WebRTC signaling with the following message types:
 
 - `offer`: SDP offer from client
 - `answer`: SDP answer from server

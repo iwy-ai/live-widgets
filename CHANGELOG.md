@@ -1,10 +1,13 @@
-# [1.2.0](https://github.com/iwy-ai/live-widgets/compare/v1.1.0...v1.2.0) (2025-10-23)
+# [1.3.2](https://github.com/iwy-ai/live-widgets/compare/v1.3.1...v1.3.2) (2025-10-23)
 
+## What Changed?
 
-### Features
+The WebRTC Live Avatar component has been refactored to eliminate the TypeScript dependency and hardcode the WebSocket URL. This means:
 
-* add audio-visualizer component ([a837f45](https://github.com/iwy-ai/live-widgets/commit/a837f451ad3a1d34392d01dce099912291e4ff46))
-* add webrtc rectangular widget ([cf40a6a](https://github.com/iwy-ai/live-widgets/commit/cf40a6ac7529157f5a9006a5244a834170ae03b8))
+1. **No more TypeScript**: `dist/src.js` is now the primary source file
+2. **No build step required**: Use the JavaScript file directly
+3. **WebSocket URL is hardcoded**: No need for wrapper components or monkey-patching
+4. **Simpler integration**: Works out of the box in any framework
 
 # [1.3.1](https://github.com/iwy-ai/live-widgets/compare/v1.3.0...v1.3.1) (2025-10-23)
 
