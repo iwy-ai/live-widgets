@@ -43,7 +43,7 @@ The easiest way to use this component is to directly import the JavaScript file:
 ### Via CDN
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@iwy/live-widgets@latest/dist/webrtc-live-avatar-rectangular.min.js"></script>
+<script src="https://unpkg.com/@iwy/live-widgets@latest/dist/webrtc-live-avatar-rectangular.min.js"></script>
 
 <live-avatar agentid="your-agent-id" language="en"></live-avatar>
 ```
