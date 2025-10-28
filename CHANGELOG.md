@@ -1,12 +1,13 @@
-# [1.2.0](https://github.com/iwy-ai/live-widgets/compare/v1.1.0...v1.2.0) (2025-10-24)
+# [1.4.0](https://github.com/iwy-ai/live-widgets/compare/v1.3.3...v1.4.0) (2025-10-28)
 
 
 ### Features
 
-* add audio-visualizer component ([a837f45](https://github.com/iwy-ai/live-widgets/commit/a837f451ad3a1d34392d01dce099912291e4ff46))
-* add webrtc rectangular widget ([cf40a6a](https://github.com/iwy-ai/live-widgets/commit/cf40a6ac7529157f5a9006a5244a834170ae03b8))
+* Add headless SDK for framework-agnostic integration with complete TypeScript support
+* Introduce LiveAvatarSDK class providing programmatic control over avatar lifecycle and state management
+* Enable React, Vue, and vanilla JavaScript implementations through unified SDK interface
 
-# [1.2.0](https://github.com/iwy-ai/live-widgets/compare/v1.1.0...v1.2.0) (2025-10-23)
+# [1.3.3](https://github.com/iwy-ai/live-widgets/compare/v1.3.2...v1.3.3) (2025-10-23)
 
 
 ### Features

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiveAvatarSDK - Vanilla JS Example</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            height: 450px;
+            background: #000;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+        }
+
+        .status-badge.connected {
+            background: rgba(34, 197, 94, 0.9);
+        }
+
+        .status-badge.connecting {
+            background: rgba(249, 115, 22, 0.9);
+        }
+
+        .status-badge.error {
+            background: rgba(239, 68, 68, 0.9);
+        }
+
+        .controls {
+            padding: 24px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-connect {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-connect:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-disconnect {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-disconnect:hover:not(:disabled) {
+            background: #dc2626;
+        }
+
+        .btn-mic {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-mic.active {
+            background: #10b981;
+        }
+
+        .audio-visualizer {
+            margin-top: 20px;
+            padding: 16px;
+            background: #f3f4f6;
+            border-radius: 8px;
+        }
+
+        .audio-label {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .audio-bar-container {
+            width: 100%;
+            height: 8px;
+            background: #d1d5db;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .audio-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            transition: width 0.1s ease;
+            border-radius: 4px;
+        }
+
+        .error-message {
+            margin-top: 16px;
+            padding: 12px;
+            background: #fee2e2;
+            border: 1px solid #ef4444;
+            border-radius: 8px;
+            color: #991b1b;
+            font-size: 14px;
+            display: none;
+        }
+
+        .error-message.visible {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="video-wrapper">
+            <video id="video" autoplay playsinline muted></video>
+            <audio id="audio" autoplay></audio>
+            <div id="status" class="status-badge">Disconnected</div>
+        </div>
+
+        <div class="controls">
+            <div class="button-group">
+                <button id="connect-btn" class="btn-connect">
+                    Start Call
+                </button>
+                <button id="disconnect-btn" class="btn-disconnect" disabled>
+                    End Call
+                </button>
+                <button id="mic-btn" class="btn-mic active">
+                    🎤 Mic On
+                </button>
+            </div>
+
+            <div class="audio-visualizer">
+                <div class="audio-label">Microphone Level</div>
+                <div class="audio-bar-container">
+                    <div id="audio-bar" class="audio-bar" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div id="error" class="error-message"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { LiveAvatarSDK } from 'https://unpkg.com/@iwy/live-widgets@latest/dist/headless.esm.js';
+
+        // Get DOM elements
+        const videoEl = document.getElementById('video');
+        const audioEl = document.getElementById('audio');
+        const statusEl = document.getElementById('status');
+        const connectBtn = document.getElementById('connect-btn');
+        const disconnectBtn = document.getElementById('disconnect-btn');
+        const micBtn = document.getElementById('mic-btn');
+        const audioBar = document.getElementById('audio-bar');
+        const errorEl = document.getElementById('error');
+
+        // Create SDK instance
+        const avatar = new LiveAvatarSDK(
+            {
+                agentId: 'demo', // Replace with your agent ID
+                videoElement: videoEl,
+                audioElement: audioEl,
+            },
+            {
+                onConnecting: () => {
+                    statusEl.textContent = 'Connecting...';
+                    statusEl.className = 'status-badge connecting';
+                    connectBtn.disabled = true;
+                    errorEl.classList.remove('visible');
+                },
+                onConnected: () => {
+                    statusEl.textContent = 'Connected';
+                    statusEl.className = 'status-badge connected';
+                    disconnectBtn.disabled = false;
+                    micBtn.disabled = false;
+                },
+                onDisconnected: () => {
+                    statusEl.textContent = 'Disconnected';
+                    statusEl.className = 'status-badge';
+                    connectBtn.disabled = false;
+                    disconnectBtn.disabled = true;
+                    micBtn.disabled = true;
+                    audioBar.style.width = '0%';
+                },
+                onError: (error) => {
+                    statusEl.textContent = 'Error';
+                    statusEl.className = 'status-badge error';
+                    errorEl.textContent = error.message;
+                    errorEl.classList.add('visible');
+                    connectBtn.disabled = false;
+                },
+                onAudioLevel: (level) => {
+                    audioBar.style.width = `${level * 100}%`;
+                },
+                onBotConnected: () => {
+                    console.log('Bot joined the call!');
+                },
+                onUserTranscript: (data) => {
+                    if (data.final) {
+                        console.log('User said:', data.text);
+                    }
+                },
+                onBotTranscript: (data) => {
+                    console.log('Bot said:', data.text);
+                },
+                onMicStateChange: (enabled) => {
+                    micBtn.textContent = enabled ? '🎤 Mic On' : '🎤 Mic Off';
+                    micBtn.className = enabled ? 'btn-mic active' : 'btn-mic';
+                },
+            }
+        );
+
+        // Wire up buttons
+        connectBtn.addEventListener('click', () => {
+            avatar.connect();
+        });
+
+        disconnectBtn.addEventListener('click', () => {
+            avatar.disconnect();
+        });
+
+        micBtn.addEventListener('click', () => {
+            avatar.toggleMic();
+        });
+    </script>
+</body>
+</html>

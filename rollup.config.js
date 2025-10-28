@@ -1,6 +1,7 @@
 import terser from '@rollup/plugin-terser';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import typescript from '@rollup/plugin-typescript';
 
 export default [
   // UMD build for CDN usage (with Pipecat bundled)
@@ -10,7 +11,7 @@ export default [
       file: 'dist/live-avatar.min.js',
       format: 'iife',
       name: 'LiveAvatar',
-      banner: '/* @iwy/live-avatar v1.2.0 | MIT License | https://www.iwy.ai */'
+      banner: '/* @iwy/live-avatar v1.4.0 | MIT License | https://www.iwy.ai */'
     },
     plugins: [
       resolve({
@@ -34,7 +35,7 @@ export default [
     output: {
       file: 'dist/live-avatar.esm.js',
       format: 'es',
-      banner: '/* @iwy/live-avatar v1.2.0 | MIT License | https://www.iwy.ai */'
+      banner: '/* @iwy/live-avatar v1.4.0 | MIT License | https://www.iwy.ai */'
     },
     plugins: [
       resolve({
@@ -50,7 +51,7 @@ export default [
     output: {
       file: 'dist/live-avatar.js',
       format: 'cjs',
-      banner: '/* @iwy/live-avatar v1.2.0 | MIT License | https://www.iwy.ai */',
+      banner: '/* @iwy/live-avatar v1.4.0 | MIT License | https://www.iwy.ai */',
       exports: 'auto'
     },
     plugins: [
@@ -68,7 +69,7 @@ export default [
       file: 'dist/live-avatar-rectangular.min.js',
       format: 'iife',
       name: 'LiveAvatarRectangular',
-      banner: '/* @iwy/live-avatar-rectangular v1.3.2 | MIT License | https://www.iwy.ai */'
+      banner: '/* @iwy/live-avatar-rectangular v1.4.0 | MIT License | https://www.iwy.ai */'
     },
     plugins: [
       resolve({
@@ -92,7 +93,7 @@ export default [
     output: {
       file: 'dist/live-avatar-rectangular.esm.js',
       format: 'es',
-      banner: '/* @iwy/live-avatar-rectangular v1.3.2 | MIT License | https://www.iwy.ai */'
+      banner: '/* @iwy/live-avatar-rectangular v1.4.0 | MIT License | https://www.iwy.ai */'
     },
     plugins: [
       resolve({
@@ -108,7 +109,7 @@ export default [
     output: {
       file: 'dist/live-avatar-rectangular.js',
       format: 'cjs',
-      banner: '/* @iwy/live-avatar-rectangular v1.3.2 | MIT License | https://www.iwy.ai */',
+      banner: '/* @iwy/live-avatar-rectangular v1.4.0 | MIT License | https://www.iwy.ai */',
       exports: 'auto'
     },
     plugins: [
@@ -126,7 +127,7 @@ export default [
       file: 'dist/webrtc-live-avatar-rectangular.min.js',
       format: 'iife',
       name: 'WebRTCLiveAvatarRectangular',
-      banner: '/* @iwy/webrtc-live-avatar-rectangular v1.3.2 | MIT License | https://www.iwy.ai */'
+      banner: '/* @iwy/webrtc-live-avatar-rectangular v1.4.0 | MIT License | https://www.iwy.ai */'
     },
     plugins: [
       resolve({
@@ -150,7 +151,7 @@ export default [
     output: {
       file: 'dist/webrtc-live-avatar-rectangular.esm.js',
       format: 'es',
-      banner: '/* @iwy/webrtc-live-avatar-rectangular v1.3.2 | MIT License | https://www.iwy.ai */'
+      banner: '/* @iwy/webrtc-live-avatar-rectangular v1.4.0 | MIT License | https://www.iwy.ai */'
     },
     plugins: [
       resolve({
@@ -166,7 +167,7 @@ export default [
     output: {
       file: 'dist/webrtc-live-avatar-rectangular.js',
       format: 'cjs',
-      banner: '/* @iwy/webrtc-live-avatar-rectangular v1.3.2 | MIT License | https://www.iwy.ai */',
+      banner: '/* @iwy/webrtc-live-avatar-rectangular v1.4.0 | MIT License | https://www.iwy.ai */',
       exports: 'auto'
     },
     plugins: [
@@ -184,7 +185,7 @@ export default [
       file: 'dist/audio-visualizer.min.js',
       format: 'iife',
       name: 'AudioVisualizer',
-      banner: '/* @iwy/audio-visualizer v1.3.2 | MIT License | https://www.iwy.ai */'
+      banner: '/* @iwy/audio-visualizer v1.4.0 | MIT License | https://www.iwy.ai */'
     },
     plugins: [
       resolve({
@@ -208,7 +209,7 @@ export default [
     output: {
       file: 'dist/audio-visualizer.esm.js',
       format: 'es',
-      banner: '/* @iwy/audio-visualizer v1.3.2 | MIT License | https://www.iwy.ai */'
+      banner: '/* @iwy/audio-visualizer v1.4.0 | MIT License | https://www.iwy.ai */'
     },
     plugins: [
       resolve({
@@ -224,13 +225,96 @@ export default [
     output: {
       file: 'dist/audio-visualizer.js',
       format: 'cjs',
-      banner: '/* @iwy/audio-visualizer v1.3.2 | MIT License | https://www.iwy.ai */',
+      banner: '/* @iwy/audio-visualizer v1.4.0 | MIT License | https://www.iwy.ai */',
       exports: 'auto'
     },
     plugins: [
       resolve({
         browser: true,
         preferBuiltins: false
+      }),
+      commonjs()
+    ]
+  },
+  // Headless SDK - UMD build for CDN usage
+  {
+    input: 'headless/src/index.ts',
+    output: {
+      file: 'dist/headless.min.js',
+      format: 'iife',
+      name: 'LiveAvatarHeadless',
+      banner: '/* @iwy/live-widgets-headless v1.4.0 | MIT License | https://www.iwy.ai */'
+    },
+    plugins: [
+      typescript({
+        tsconfig: 'headless/tsconfig.json',
+        compilerOptions: {
+          declaration: false,
+          declarationDir: undefined
+        },
+        exclude: ['headless/examples/**/*']
+      }),
+      resolve({
+        browser: true,
+        preferBuiltins: false,
+        extensions: ['.ts', '.js']
+      }),
+      commonjs(),
+      terser({
+        compress: {
+          drop_console: false
+        },
+        format: {
+          comments: /^!/
+        }
+      })
+    ]
+  },
+  // Headless SDK - ESM build
+  {
+    input: 'headless/src/index.ts',
+    output: {
+      file: 'dist/headless.esm.js',
+      format: 'es',
+      banner: '/* @iwy/live-widgets-headless v1.4.0 | MIT License | https://www.iwy.ai */'
+    },
+    plugins: [
+      typescript({
+        tsconfig: 'headless/tsconfig.json',
+        declaration: true,
+        declarationDir: 'dist/types',
+        exclude: ['headless/examples/**/*']
+      }),
+      resolve({
+        browser: true,
+        preferBuiltins: false,
+        extensions: ['.ts', '.js']
+      }),
+      commonjs()
+    ]
+  },
+  // Headless SDK - CommonJS build
+  {
+    input: 'headless/src/index.ts',
+    output: {
+      file: 'dist/headless.js',
+      format: 'cjs',
+      banner: '/* @iwy/live-widgets-headless v1.4.0 | MIT License | https://www.iwy.ai */',
+      exports: 'auto'
+    },
+    plugins: [
+      typescript({
+        tsconfig: 'headless/tsconfig.json',
+        compilerOptions: {
+          declaration: false,
+          declarationDir: undefined
+        },
+        exclude: ['headless/examples/**/*']
+      }),
+      resolve({
+        browser: true,
+        preferBuiltins: false,
+        extensions: ['.ts', '.js']
       }),
       commonjs()
     ]

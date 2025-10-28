@@ -1,6 +1,6 @@
 {
   "name": "@iwy/live-widgets",
-  "version": "1.2.0",
+  "version": "1.4.0",
   "description": "Embeddable AI avatar and audio visualizer widgets for live conversations",
   "type": "module",
   "main": "dist/live-avatar.js",
@@ -27,6 +27,12 @@
       "import": "./dist/webrtc-live-avatar-rectangular.esm.js",
       "require": "./dist/webrtc-live-avatar-rectangular.js",
       "default": "./dist/webrtc-live-avatar-rectangular.min.js"
+    },
+    "./headless": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/headless.esm.js",
+      "require": "./dist/headless.js",
+      "default": "./dist/headless.min.js"
     }
   },
   "files": [
@@ -47,7 +53,10 @@
     "plasma",
     "pipecat",
     "webcomponent",
-    "embedding"
+    "embedding",
+    "headless",
+    "sdk",
+    "webrtc"
   ],
   "author": "iwy.ai",
   "license": "MIT",
@@ -60,6 +69,7 @@
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.3.0",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/exec": "^7.1.0",
     "@semantic-release/git": "^10.0.1",
@@ -67,6 +77,7 @@
     "@semantic-release/npm": "^12.0.2",
     "rollup": "^4.9.0",
     "semantic-release": "^24.2.9",
+    "tslib": "^2.8.1",
     "typescript": "^5.9.3",
     "vite": "^7.1.11"
   },
