@@ -78,23 +78,7 @@ export default function AvatarPage() {
 
 ## WebSocket Configuration
 
-The component connects to `wss://iwy-ai--wr-start.modal.run/ws/{peerId}` by default. 
-
-To customize the WebSocket URL, edit the `WEBSOCKET_URL` constant at the top of `dist/src.js`:
-
-```javascript
-// ============================================================================
-// CONFIGURATION - Edit this to change the WebSocket URL
-// ============================================================================
-const WEBSOCKET_URL = 'wss://your-custom-server.com/ws';
-// ============================================================================
-```
-
-The WebSocket server should handle WebRTC signaling with the following message types:
-
-- `offer`: SDP offer from client
-- `answer`: SDP answer from server
-- `ice_candidate`: ICE candidate exchange
+The component connects to `wss://iwy-ai--wr-start.modal.run/ws/{peerId}` by default, but the ICE trickle signaling is abstracted away inside the component itself. 
 
 ## Styling
 
@@ -107,16 +91,6 @@ live-avatar {
   border-radius: 16px;
 }
 ```
-
-## Development
-
-To run the example locally:
-
-```bash
-npm run dev
-```
-
-Then open `webrtc-live-avatar-rectangular/examples/index.html` in your browser.
 
 ## License
 
