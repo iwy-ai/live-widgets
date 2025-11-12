@@ -27,7 +27,11 @@ The easiest way to use this component is to directly import the JavaScript file:
 ```html
 <script type="module" src="./dist/src.js"></script>
 
-<live-avatar agentid="your-agent-id" language="en"></live-avatar>
+<live-avatar 
+  agentid="your-agent-id" 
+  publicapikey="iwy_pk__your_api_key" 
+  language="en">
+</live-avatar>
 ```
 
 ### As ES Module
@@ -37,7 +41,11 @@ The easiest way to use this component is to directly import the JavaScript file:
   import '@iwy/live-widgets/webrtc-rectangular';
 </script>
 
-<live-avatar agentid="your-agent-id" language="en"></live-avatar>
+<live-avatar 
+  agentid="your-agent-id" 
+  publicapikey="iwy_pk__your_api_key" 
+  language="en">
+</live-avatar>
 ```
 
 ### Via CDN
@@ -45,7 +53,11 @@ The easiest way to use this component is to directly import the JavaScript file:
 ```html
 <script src="https://unpkg.com/@iwy/live-widgets@latest/dist/webrtc-live-avatar-rectangular.min.js"></script>
 
-<live-avatar agentid="your-agent-id" language="en"></live-avatar>
+<live-avatar 
+  agentid="your-agent-id" 
+  publicapikey="iwy_pk__your_api_key" 
+  language="en">
+</live-avatar>
 ```
 
 ### In React/Next.js
@@ -65,7 +77,11 @@ export default function AvatarPage() {
 
   return (
     <div style={{ width: '400px', height: '400px' }}>
-      <live-avatar agentid="demo" language="en" />
+      <live-avatar 
+        agentid="demo" 
+        publicapikey="iwy_pk__your_api_key"
+        language="en" 
+      />
     </div>
   )
 }
@@ -73,12 +89,37 @@ export default function AvatarPage() {
 
 ## Attributes
 
-- `agentid`: The ID of the agent to connect to
-- `language`: Language code (e.g., "en", "es")
+- **`agentid`** (required): The ID of the agent to connect to
+- **`publicapikey`** (required): Your IWY API key for authentication and ICE server access
+- **`language`** (optional): Language code (e.g., "en", "es") - defaults to "en"
 
-## WebSocket Configuration
+## How It Works
 
-The component connects to `wss://iwy-ai--wr-start.modal.run/ws/{peerId}` by default, but the ICE trickle signaling is abstracted away inside the component itself. 
+### WebSocket Configuration
+
+The component connects to `wss://iwy-ai--wr-start.modal.run/ws/{peerId}` by default, but the ICE trickle signaling is abstracted away inside the component itself.
+
+### ICE Server Configuration
+
+The component automatically fetches complete ICE server configuration from the IWY API using your public API key. This provides:
+
+- **Time-limited TURN credentials** via Twilio for secure NAT traversal (1 hour TTL)
+- **STUN servers** for peer discovery (Twilio + Google)
+- **Automatic credential rotation** on each connection
+- **Credentials never hardcoded** in your client-side code
+- **Prefetching for low latency** - ICE servers are fetched when the component loads
+
+#### How Prefetching Works
+
+For optimal performance, ICE servers are **prefetched in the background** when the component loads:
+
+1. Component loads → ICE servers are fetched immediately
+2. User clicks "Connect" → Cached servers are used instantly (no API delay)
+3. Servers are cached for 1 hour and automatically refreshed when expired
+
+This eliminates the ~200-500ms API latency from the connection flow, providing instant WebRTC setup when users click connect.
+
+**Important:** The connection will fail if ICE servers cannot be fetched from the API. Ensure your API key is valid and the endpoint is accessible. 
 
 ## Styling
 

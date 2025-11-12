@@ -69,14 +69,19 @@
     <h1>🤖 Live Avatar over WebRTC (Dev Mode)</h1>
 
     <div class="demo-container">
-        <live-avatar agentid="demo" language="en"></live-avatar>
+        <live-avatar 
+            agentid="demo" 
+            publicapikey="iwy_pk__WXa2Gxb87RJA_3AGvaWqW2OK-SIJEbqKyym056zG8E" 
+            language="en">
+        </live-avatar>
     </div>
 
     <div class="info">
         <h2>Standalone JavaScript Component</h2>
         <p>Pure JavaScript - no TypeScript, no build step required!</p>
         <p style="margin-top: 10px; font-size: 0.9em;">
-            WebSocket URL: <code>wss://iwy-ai--wr-start.modal.run/ws</code>
+            WebSocket: <code>wss://iwy-ai--wr-start.modal.run/ws</code><br>
+            ICE Servers: <code>https://api.iwy.ai/v1/ice-servers</code> (STUN + time-limited TURN)
         </p>
     </div>
 

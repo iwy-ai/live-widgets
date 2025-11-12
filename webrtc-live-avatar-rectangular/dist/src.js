@@ -5,19 +5,21 @@
  * This is the primary source file - no build step required!
  * 
  * Usage:
- *   <live-avatar agentid="demo" language="en"></live-avatar>
+ *   <live-avatar agentid="demo" publicapikey="iwy_pk__xxx" language="en"></live-avatar>
  * 
  * Attributes:
- *   - agentid: Agent identifier
+ *   - agentid: Agent identifier (required)
+ *   - publicapikey: IWY API key for authentication (required)
  *   - language: Language code (e.g., 'en')
  * 
  * To customize the WebSocket URL, edit the WEBSOCKET_URL constant below.
  */
 
 // ============================================================================
-// CONFIGURATION - Edit this to change the WebSocket URL
+// CONFIGURATION - Edit these to change API endpoints
 // ============================================================================
 const WEBSOCKET_URL = 'wss://iwy-ai--wr-start.modal.run/ws';
+const ICE_SERVERS_URL = 'https://api.iwy.ai/v1/ice-servers';
 // ============================================================================
 
 class LiveAvatarElement extends HTMLElement {
@@ -30,17 +32,45 @@ class LiveAvatarElement extends HTMLElement {
         this.isMuted = false;
         this.shadow = this.attachShadow({ mode: 'open' });
         this.peerId = `client-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        this.cachedIceServers = null;
+        this.iceServersFetchTime = null;
+        this.iceServersTTL = 3600000; // 1 hour in milliseconds
     }
     connectedCallback() {
         this.render();
         this.setupEventListeners();
+        // Prefetch ICE servers for faster connection
+        this.prefetchIceServers();
     }
     disconnectedCallback() {
         this.disconnect();
     }
     render() {
         const agentId = this.getAttribute('agentid') || 'default';
+        const publicApiKey = this.getAttribute('publicapikey');
         const language = this.getAttribute('language') || 'en';
+        
+        // Validate required attributes
+        if (!publicApiKey) {
+            console.error('[LiveAvatar] Error: publicapikey attribute is required');
+            this.shadow.innerHTML = `
+                <style>
+                    .error { 
+                        color: #f44336; 
+                        padding: 20px; 
+                        text-align: center;
+                        font-family: system-ui, -apple-system, sans-serif;
+                    }
+                </style>
+                <div class="error">
+                    <strong>Configuration Error:</strong><br>
+                    The "publicapikey" attribute is required.<br>
+                    Usage: &lt;live-avatar agentid="demo" publicapikey="iwy_pk__xxx" language="en"&gt;&lt;/live-avatar&gt;
+                </div>
+            `;
+            return;
+        }
+        
         this.shadow.innerHTML = `
       <style>
         :host {
@@ -177,6 +207,55 @@ class LiveAvatarElement extends HTMLElement {
         this.connectBtn.addEventListener('click', () => this.toggleConnection());
         this.muteBtn.addEventListener('click', () => this.toggleMute());
     }
+    async prefetchIceServers() {
+        // Prefetch ICE servers in the background for faster connection
+        const publicApiKey = this.getAttribute('publicapikey');
+        if (!publicApiKey) {
+            return;
+        }
+        
+        try {
+            console.log('[LiveAvatar] Prefetching ICE servers for faster connection...');
+            const iceServers = await this.fetchIceServers(publicApiKey);
+            this.cachedIceServers = iceServers;
+            this.iceServersFetchTime = Date.now();
+            console.log('[LiveAvatar] ICE servers prefetched and cached:', iceServers.length, 'servers');
+        } catch (error) {
+            console.warn('[LiveAvatar] Failed to prefetch ICE servers (will retry on connect):', error.message);
+        }
+    }
+    async fetchIceServers(publicApiKey) {
+        const response = await fetch(ICE_SERVERS_URL, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${publicApiKey}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Failed to fetch ICE servers: API returned status ${response.status}`);
+        }
+        
+        const data = await response.json();
+        if (!data.iceServers || !Array.isArray(data.iceServers)) {
+            throw new Error('Invalid response format: missing iceServers array');
+        }
+        
+        // Process the ICE servers - ensure we use 'urls' field
+        return data.iceServers.map(server => {
+            const processed = {
+                urls: server.urls || server.url // Handle both 'urls' and 'url' fields
+            };
+            if (server.username) {
+                processed.username = server.username;
+            }
+            if (server.credential) {
+                processed.credential = server.credential;
+            }
+            return processed;
+        });
+    }
     async toggleConnection() {
         if (this.connectionActive) {
             await this.disconnect();
@@ -196,7 +275,7 @@ class LiveAvatarElement extends HTMLElement {
             });
             console.log('[LiveAvatar] Got local media with', this.localStream.getTracks().length, 'tracks');
             // Create peer connection
-            this.createPeerConnection();
+            await this.createPeerConnection();
             // Connect WebSocket
             await this.connectWebSocket();
             // Send offer
@@ -211,20 +290,51 @@ class LiveAvatarElement extends HTMLElement {
                 placeholder.style.display = 'none';
         }
         catch (error) {
-            console.error('Connection failed:', error);
+            console.error('[LiveAvatar] Connection failed:', error);
             this.connectBtn.textContent = 'Connect';
             this.connectBtn.disabled = false;
-            alert('Failed to connect. Please check your microphone permissions.');
+            
+            // Provide specific error message based on error type
+            let errorMessage = 'Failed to connect.';
+            if (error.message && error.message.includes('ICE servers')) {
+                errorMessage = 'Failed to fetch ICE servers from API. Please check your API key and network connection.';
+            } else if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+                errorMessage = 'Microphone access denied. Please grant microphone permissions and try again.';
+            } else if (error.name === 'NotFoundError') {
+                errorMessage = 'No microphone found. Please connect a microphone and try again.';
+            } else if (error.message) {
+                errorMessage = `Connection failed: ${error.message}`;
+            }
+            
+            alert(errorMessage);
             await this.disconnect();
         }
     }
-    createPeerConnection() {
-        const config = {
-            iceServers: [
-                { urls: 'stun:stun.l.google.com:19302' },
-                { urls: 'stun:stun1.l.google.com:19302' },
-            ]
-        };
+    async createPeerConnection() {
+        const publicApiKey = this.getAttribute('publicapikey');
+        let iceServers = [];
+        
+        // Check if we have cached ICE servers that are still valid
+        const now = Date.now();
+        const cacheAge = this.iceServersFetchTime ? now - this.iceServersFetchTime : Infinity;
+        
+        if (this.cachedIceServers && cacheAge < this.iceServersTTL) {
+            // Use cached ICE servers (still valid)
+            iceServers = this.cachedIceServers;
+            const minutesRemaining = Math.floor((this.iceServersTTL - cacheAge) / 60000);
+            console.log('[LiveAvatar] Using cached ICE servers (', minutesRemaining, 'min remaining validity)');
+        } else {
+            // Fetch fresh ICE servers (cache expired or missing)
+            console.log('[LiveAvatar] Fetching fresh ICE servers from IWY API...');
+            iceServers = await this.fetchIceServers(publicApiKey);
+            
+            // Update cache
+            this.cachedIceServers = iceServers;
+            this.iceServersFetchTime = Date.now();
+            console.log('[LiveAvatar] Successfully fetched', iceServers.length, 'ICE servers from IWY API');
+        }
+        
+        const config = { iceServers };
         this.pc = new RTCPeerConnection(config);
         // Add local tracks (audio only)
         if (this.localStream) {
