@@ -1,3 +1,21 @@
+# [1.5.0](https://github.com/iwy-ai/live-widgets/compare/v1.4.0...v1.5.0) (2025-11-12)
+
+
+### Features
+
+* **WebRTC Widget**: Add mandatory `publicapikey` attribute for authentication and ICE server access
+* **NAT Traversal**: Implement automatic ICE server prefetching from IWY API endpoint `/v1/ice-servers`
+* **Performance**: Add ICE server caching with 1-hour TTL for low-latency connections
+* **Reliability**: Integrate Twilio-powered time-limited TURN credentials for reliable NAT traversal
+* **Error Handling**: Enhanced validation and error messages for API key and connection failures
+* **Documentation**: Update all examples and README files with required `publicapikey` attribute
+
+### Breaking Changes
+
+* The `publicapikey` attribute is now **required** for the WebRTC Live Avatar component
+* Connections will fail if ICE servers cannot be fetched from the IWY API
+* Update your implementation: `<live-avatar agentid="demo" publicapikey="iwy_pk__xxx" language="en"></live-avatar>`
+
 # [1.4.0](https://github.com/iwy-ai/live-widgets/compare/v1.3.3...v1.4.0) (2025-10-28)
 
 
