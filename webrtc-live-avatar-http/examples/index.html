@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Avatar over WebRTC (HTTP Signaling)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .demo-container {
+            width: 90%;
+            max-width: 800px;
+            height: 600px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .info {
+            color: white;
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            max-width: 800px;
+        }
+
+        .info h2 {
+            margin-top: 0;
+        }
+
+        .info code {
+            background: rgba(0,0,0,0.2);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+
+        @media (max-width: 768px) {
+            .demo-container {
+                width: 95%;
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🤖 Live Avatar over WebRTC (HTTP Signaling)</h1>
+
+    <div class="demo-container">
+        <live-avatar-http
+            agentid="demo"
+            publicapikey="iwy_pk_sxskDkWWXsvpgT84c8bfi8ku3eEBqrl2"
+            language="en">
+        </live-avatar-http>
+    </div>
+
+    <div class="info">
+        <h2>Standalone JavaScript Component</h2>
+        <p>Pure JavaScript - no TypeScript, no build step required!</p>
+        <p style="margin-top: 10px; font-size: 0.9em;">
+            HTTP Signaling: <code>https://iwy-ai--wr-http-start.modal.run</code><br>
+            ICE Servers: <code>https://api.iwy.ai/v1/ice-servers</code> (STUN + time-limited TURN)<br>
+            <strong>No WebSocket or ICE Trickle</strong> - all candidates bundled in offer/answer
+        </p>
+    </div>
+
+    <!-- Import the standalone JavaScript module -->
+    <script type="module" src="../dist/src.js"></script>
+
+</body>
+</html>

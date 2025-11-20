@@ -1,3 +1,34 @@
+# [1.6.0](https://github.com/iwy-ai/live-widgets/compare/v1.5.0...v1.6.0) (2025-11-20)
+
+
+### Features
+
+* **WebRTC HTTP Signaling**: New alternative widget using HTTP POST for signaling instead of WebSocket
+* **Simplified Signaling**: Single round-trip HTTP request/response for complete offer/answer exchange
+* **No ICE Trickle**: All ICE candidates bundled in offer/answer for simplified signaling flow
+* **Better Compatibility**: Improved firewall and proxy compatibility compared to WebSocket-based signaling
+* **Reduced Overhead**: Stateless signaling with no persistent connection required
+* **Easier Debugging**: Standard HTTP patterns for simplified troubleshooting
+* **Same Features**: Maintains all functionality of rectangular widget (ICE prefetching, authentication, audio controls)
+
+### Technical Details
+
+* HTTP signaling endpoint: `https://iwy-ai--wr-http-start.modal.run`
+* ICE gathering timeout: 1.5 seconds maximum before sending offer
+* Component location: `webrtc-live-avatar-http/`
+* Usage: Same `<live-avatar>` element with `agentid` and `publicapikey` attributes
+
+### Why HTTP Signaling?
+
+HTTP POST signaling provides several advantages over WebSocket for certain deployment scenarios:
+- **Simpler infrastructure**: No need to maintain persistent WebSocket connections
+- **Better proxy compatibility**: Works through HTTP proxies that may block WebSocket
+- **Easier debugging**: Standard HTTP tools can capture and inspect signaling traffic
+- **Lower latency**: Single round-trip vs. multiple WebSocket messages
+- **Stateless**: No connection state to manage on the signaling layer
+
+Choose HTTP signaling when you need maximum compatibility or simpler infrastructure. Choose WebSocket signaling (webrtc-live-avatar-rectangular) when you need ICE trickle or prefer persistent connections.
+
 # [1.5.0](https://github.com/iwy-ai/live-widgets/compare/v1.4.0...v1.5.0) (2025-11-12)
 
 

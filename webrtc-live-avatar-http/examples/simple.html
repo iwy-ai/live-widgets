@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Live Avatar - HTTP Signaling</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .demo-container {
+            width: 90%;
+            max-width: 800px;
+            height: 600px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+
+        .info {
+            color: #666;
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            max-width: 800px;
+            border: 1px solid #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+            .demo-container {
+                width: 95%;
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🤖 WebRTC Live Avatar (HTTP Signaling)</h1>
+
+    <div class="demo-container">
+        <live-avatar-http
+            agentid="demo"
+            publicapikey="iwy_pk_sxskDkWWXsvpgT84c8bfi8ku3eEBqrl2"
+            language="en">
+        </live-avatar-http>
+    </div>
+
+    <!-- Import the standalone JavaScript module -->
+    <script type="module" src="../dist/src.js"></script>
+
+</body>
+</html>
