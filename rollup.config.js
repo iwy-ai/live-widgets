@@ -236,6 +236,64 @@ export default [
       commonjs()
     ]
   },
+  // WebRTC Live Avatar HTTP - UMD build for CDN usage
+  {
+    input: 'webrtc-live-avatar-http/dist/src.js',
+    output: {
+      file: 'dist/webrtc-live-avatar-http.min.js',
+      format: 'iife',
+      name: 'WebRTCLiveAvatarHTTP',
+      banner: '/* @iwy/webrtc-live-avatar-http v1.6.1 | MIT License | https://www.iwy.ai */'
+    },
+    plugins: [
+      resolve({
+        browser: true,
+        preferBuiltins: false
+      }),
+      commonjs(),
+      terser({
+        compress: {
+          drop_console: false
+        },
+        format: {
+          comments: /^!/
+        }
+      })
+    ]
+  },
+  // WebRTC Live Avatar HTTP - ESM build
+  {
+    input: 'webrtc-live-avatar-http/dist/src.js',
+    output: {
+      file: 'dist/webrtc-live-avatar-http.esm.js',
+      format: 'es',
+      banner: '/* @iwy/webrtc-live-avatar-http v1.6.1 | MIT License | https://www.iwy.ai */'
+    },
+    plugins: [
+      resolve({
+        browser: true,
+        preferBuiltins: false
+      }),
+      commonjs()
+    ]
+  },
+  // WebRTC Live Avatar HTTP - CommonJS build
+  {
+    input: 'webrtc-live-avatar-http/dist/src.js',
+    output: {
+      file: 'dist/webrtc-live-avatar-http.js',
+      format: 'cjs',
+      banner: '/* @iwy/webrtc-live-avatar-http v1.6.1 | MIT License | https://www.iwy.ai */',
+      exports: 'auto'
+    },
+    plugins: [
+      resolve({
+        browser: true,
+        preferBuiltins: false
+      }),
+      commonjs()
+    ]
+  },
   // Headless SDK - UMD build for CDN usage
   {
     input: 'headless/src/index.ts',

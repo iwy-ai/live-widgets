@@ -1,3 +1,12 @@
+# [1.6.1](https://github.com/iwy-ai/live-widgets/compare/v1.6.0...v1.6.1) (2025-11-20)
+
+
+### Bug Fixes
+
+* **Build Pipeline**: Add HTTP widget to rollup build configuration and package.json exports
+* **NPM Distribution**: Enable dist file generation for webrtc-live-avatar-http component
+* **CDN Access**: Fix unpkg/jsdelivr CDN access for HTTP signaling widget
+
 # [1.6.0](https://github.com/iwy-ai/live-widgets/compare/v1.5.0...v1.6.0) (2025-11-20)
 
 
