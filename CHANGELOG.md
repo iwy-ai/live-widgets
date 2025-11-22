@@ -1,3 +1,40 @@
+# [1.7.0](https://github.com/iwy-ai/live-widgets/compare/v1.6.1...v1.7.0) (2025-11-22)
+
+
+### Features
+
+* **New Component**: Add `iwy-corner-circular` component - circular floating avatar bubble in bottom-right corner
+* **Component Architecture**: Rebranded live-avatar to iwy-corner-circular with proper custom element registration
+* **Build Pipeline**: Add iwy-corner-circular to rollup build configuration with UMD, ESM, and CommonJS outputs
+* **NPM Distribution**: Enable dist file generation for iwy-corner-circular component
+* **CDN Access**: Configure unpkg/jsdelivr CDN access for circular corner widget
+* **Package Exports**: Add `./corner-circular` export path for TypeScript-friendly imports
+* **Documentation**: Comprehensive README with usage examples for HTML, React, Vue, and Angular
+* **Multi-language Support**: Built-in English and Norwegian UI text support
+
+### Technical Details
+
+* Component element: `<iwy-corner-circular>`
+* Build outputs: `dist/iwy-corner-circular.{min.js,esm.js,js}`
+* Import path: `@iwy/live-widgets/corner-circular`
+* CDN URLs:
+  - `https://unpkg.com/@iwy/live-widgets@latest/dist/iwy-corner-circular.min.js`
+  - `https://cdn.jsdelivr.net/npm/@iwy/live-widgets@latest/dist/iwy-corner-circular.min.js`
+
+### Usage
+
+```html
+<!-- Via CDN -->
+<script src="https://unpkg.com/@iwy/live-widgets@latest/dist/iwy-corner-circular.min.js"></script>
+<iwy-corner-circular agentid="your-agent-id" language="en"></iwy-corner-circular>
+```
+
+```tsx
+// Via npm (TypeScript)
+import '@iwy/live-widgets/corner-circular';
+<iwy-corner-circular agentid="your-agent-id" language="en"></iwy-corner-circular>
+```
+
 # [1.6.1](https://github.com/iwy-ai/live-widgets/compare/v1.6.0...v1.6.1) (2025-11-20)
 
 

@@ -36,12 +36,12 @@
 // -------------------------------------------------------------------------------------------------------
 
 
-// Embeddable LiveAvatar widget with Pipecat integration
+// Embeddable iwy-corner-circular widget with Pipecat integration
 // Usage example (insert in host page):
-//   <live-avatar agentid="YOUR_AGENT_ID"></live-avatar>
-//   <script src="https://unpkg.com/@iwy/live-widgets@latest/dist/live-avatar.min.js" async></script>
+//   <iwy-corner-circular agentid="YOUR_AGENT_ID"></iwy-corner-circular>
+//   <script src="https://unpkg.com/@iwy/live-widgets@latest/dist/iwy-corner-circular.min.js" async></script>
 //
-// This script defines a custom element <live-avatar> which displays an AI avatar
+// This script defines a custom element <iwy-corner-circular> which displays an AI avatar
 // video chat bubble in the bottom-right corner of the page. Clicking the
 // "Start Call" button will establish a Pipecat session with the backend
 // agent associated with the provided agentid attribute.
@@ -66,7 +66,7 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
   };
 
   /* -------------------------------------------------------------
-   *  <live-avatar> implementation with Pipecat
+   *  <iwy-corner-circular> implementation with Pipecat
    * ------------------------------------------------------------- */
   class LiveAvatar extends HTMLElement {
     constructor() {
@@ -771,7 +771,7 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
       if (this._state.connecting || this._state.connected) return;
 
       if (!this._agentId) {
-        console.error("<live-avatar> missing agentid attribute");
+        console.error("<iwy-corner-circular> missing agentid attribute");
         return;
       }
 
@@ -1217,7 +1217,7 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
   }
 
   // Register element once
-  if (!customElements.get("live-avatar")) {
-    customElements.define("live-avatar", LiveAvatar);
+  if (!customElements.get("iwy-corner-circular")) {
+    customElements.define("iwy-corner-circular", LiveAvatar);
   }
 })();

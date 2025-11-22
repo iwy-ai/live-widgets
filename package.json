@@ -1,6 +1,6 @@
 {
   "name": "@iwy/live-widgets",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "description": "Embeddable AI avatar and audio visualizer widgets for live conversations",
   "type": "module",
   "main": "dist/live-avatar.js",
@@ -32,6 +32,11 @@
       "import": "./dist/webrtc-live-avatar-http.esm.js",
       "require": "./dist/webrtc-live-avatar-http.js",
       "default": "./dist/webrtc-live-avatar-http.min.js"
+    },
+    "./corner-circular": {
+      "import": "./dist/iwy-corner-circular.esm.js",
+      "require": "./dist/iwy-corner-circular.js",
+      "default": "./dist/iwy-corner-circular.min.js"
     },
     "./headless": {
       "types": "./dist/types/index.d.ts",

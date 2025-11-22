@@ -1,4 +1,4 @@
-# Live Avatar Component
+# iwy-corner-circular Component
 
 A circular AI avatar widget that appears as a floating bubble in the bottom-right corner of your page. Built for Pipecat voice AI applications with video streaming support.
 
@@ -14,8 +14,8 @@ A circular AI avatar widget that appears as a floating bubble in the bottom-righ
 
 ## What Makes It Different
 
-**Live Avatar vs Other Components:**
-- **live-avatar** (this component): Circular floating bubble in bottom-right corner with video
+**iwy-corner-circular vs Other Components:**
+- **iwy-corner-circular** (this component): Circular floating bubble in bottom-right corner with video
 - **live-avatar-rectangular**: Rectangular container with video that fills its parent div
 - **audio-visualizer**: Audio-only component with WebGL plasma visualization (no video)
 
@@ -33,10 +33,10 @@ npm install @iwy/live-widgets
 
 ```html
 <!-- unpkg -->
-<script src="https://unpkg.com/@iwy/live-widgets@latest/dist/live-avatar.min.js"></script>
+<script src="https://unpkg.com/@iwy/live-widgets@latest/dist/iwy-corner-circular.min.js"></script>
 
 <!-- jsdelivr -->
-<script src="https://cdn.jsdelivr.net/npm/@iwy/live-widgets@latest/dist/live-avatar.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@iwy/live-widgets@latest/dist/iwy-corner-circular.min.js"></script>
 ```
 
 ## Quick Start
@@ -47,15 +47,15 @@ npm install @iwy/live-widgets
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Live Avatar Demo</title>
+    <title>iwy-corner-circular Demo</title>
 </head>
 <body>
     <h1>My Website</h1>
     <p>The avatar will appear in the bottom-right corner.</p>
 
-    <live-avatar agentid="your-agent-id"></live-avatar>
+    <iwy-corner-circular agentid="your-agent-id"></iwy-corner-circular>
 
-    <script src="https://unpkg.com/@iwy/live-widgets@latest/dist/live-avatar.min.js"></script>
+    <script src="https://unpkg.com/@iwy/live-widgets@latest/dist/iwy-corner-circular.min.js"></script>
 </body>
 </html>
 ```
@@ -63,12 +63,12 @@ npm install @iwy/live-widgets
 ### React/TypeScript
 
 ```tsx
-import '@iwy/live-widgets';
+import '@iwy/live-widgets/corner-circular';
 
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      'live-avatar': {
+      'iwy-corner-circular': {
         agentid: string;
         'data-endpoint'?: string;
         language?: 'en' | 'no';
@@ -81,7 +81,7 @@ function App() {
   return (
     <div>
       <h1>My App</h1>
-      <live-avatar agentid="your-agent-id" language="en"></live-avatar>
+      <iwy-corner-circular agentid="your-agent-id" language="en"></iwy-corner-circular>
     </div>
   );
 }
@@ -93,12 +93,12 @@ function App() {
 <template>
   <div>
     <h1>My App</h1>
-    <live-avatar agentid="your-agent-id" language="en"></live-avatar>
+    <iwy-corner-circular agentid="your-agent-id" language="en"></iwy-corner-circular>
   </div>
 </template>
 
 <script setup>
-import '@iwy/live-widgets';
+import '@iwy/live-widgets/corner-circular';
 </script>
 ```
 
@@ -106,13 +106,13 @@ import '@iwy/live-widgets';
 
 ```typescript
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import '@iwy/live-widgets';
+import '@iwy/live-widgets/corner-circular';
 
 @Component({
   selector: 'app-root',
   template: `
     <h1>My App</h1>
-    <live-avatar agentid="your-agent-id" language="en"></live-avatar>
+    <iwy-corner-circular agentid="your-agent-id" language="en"></iwy-corner-circular>
   `,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
@@ -145,7 +145,7 @@ The component is self-positioning and requires no parent styling. It creates a f
 If you need custom positioning, you can override the CSS via:
 
 ```css
-live-avatar {
+iwy-corner-circular {
   /* Override default positioning if needed */
 }
 ```
