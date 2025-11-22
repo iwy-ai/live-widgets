@@ -72,6 +72,7 @@ declare global {
         agentid: string;
         'data-endpoint'?: string;
         language?: 'en' | 'no';
+        'warm-start'?: boolean | '';
       };
     }
   }
@@ -126,8 +127,27 @@ export class AppComponent {}
 | `agentid` | string | Yes | - | Your Pipecat agent ID |
 | `data-endpoint` | string | No | `https://api.iwy.ai/v1/start-agent-session` | Custom session endpoint |
 | `language` | string | No | `en` | Language for UI text (`en` or `no`) |
+| `warm-start` | boolean | No | `false` | Pre-fetch session on component load for faster connection |
 
 Languages currently supported: `en` and `no`
+
+### Warm-Start Mode
+
+When `warm-start="true"` is enabled, the component pre-fetches the session from the backend immediately after loading, but waits to join the room until the user clicks the avatar. This significantly reduces perceived latency when starting a call.
+
+**Benefits:**
+- **Faster Connection**: Session is already fetched when user clicks
+- **Better UX**: Near-instant room joining (no fetch delay)
+- **Graceful Handling**: If user clicks before prefetch completes, it waits automatically
+
+**Usage:**
+```html
+<!-- With warm-start enabled -->
+<iwy-corner-circular agentid="your-agent-id" warm-start="true"></iwy-corner-circular>
+
+<!-- Or just the attribute (defaults to true) -->
+<iwy-corner-circular agentid="your-agent-id" warm-start></iwy-corner-circular>
+```
 
 ## How It Works
 

@@ -80,6 +80,9 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
       this._pcClient = null; // Pipecat client
       this._agentId = null;
       this._language = "en"; // Default language
+      this._warmStart = false; // Warm-start mode
+      this._prefetchedSession = null; // Stores pre-fetched session data
+      this._prefetchPromise = null; // Promise for pre-fetch operation
       this._promptTimeout = null;
       // Timeout handle for delayed placeholder fade-out
       this._fadeTimeout = null;
@@ -105,7 +108,7 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
     }
 
     static get observedAttributes() {
-      return ["agentid", "data-endpoint", "placeholder-src", "language"];
+      return ["agentid", "data-endpoint", "placeholder-src", "language", "warm-start"];
     }
 
     attributeChangedCallback(name, _old, value) {
@@ -122,6 +125,9 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
         this._language = value || "en";
         this._updatePromptMessages();
       }
+      if (name === "warm-start") {
+        this._warmStart = value === "true" || value === "";
+      }
     }
 
     connectedCallback() {
@@ -129,6 +135,13 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
       if (!this._agentId) this._agentId = this.getAttribute("agentid");
       this._sessionEndpoint = this.getAttribute("data-endpoint") || DEFAULT_SESSION_ENDPOINT;
       this._language = this.getAttribute("language") || "en";
+      const warmStartAttr = this.getAttribute("warm-start");
+      this._warmStart = warmStartAttr === "true" || warmStartAttr === "";
+
+      // If warm-start is enabled, prefetch session immediately
+      if (this._warmStart && this._agentId) {
+        this._prefetchSession();
+      }
 
       // Button listeners
       this._startBtn.addEventListener("click", () => this._startCall());
@@ -767,6 +780,34 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
       this._menu.appendChild(link);
     }
 
+    async _prefetchSession() {
+      if (!this._agentId) {
+        console.error("<iwy-corner-circular> missing agentid for warm-start prefetch");
+        return;
+      }
+
+      // Create promise for prefetch operation
+      this._prefetchPromise = (async () => {
+        try {
+          console.log("<iwy-corner-circular> warm-start: prefetching session...");
+          const res = await fetch(this._sessionEndpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ agentId: this._agentId }),
+          });
+          if (!res.ok) throw new Error(`Prefetch session request failed (${res.status})`);
+          const data = await res.json();
+          this._prefetchedSession = data;
+          console.log("<iwy-corner-circular> warm-start: session prefetched successfully");
+          return data;
+        } catch (err) {
+          console.error("<iwy-corner-circular> warm-start prefetch failed:", err);
+          this._prefetchedSession = null;
+          throw err;
+        }
+      })();
+    }
+
     async _startCall() {
       if (this._state.connecting || this._state.connected) return;
 
@@ -795,14 +836,38 @@ import { DailyTransport } from '@pipecat-ai/daily-transport';
       this._startBtn.disabled = true;
 
       try {
-        // Request session from backend
-        const res = await fetch(this._sessionEndpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ agentId: this._agentId }),
-        });
-        if (!res.ok) throw new Error(`Session request failed (${res.status})`);
-        const { roomUrl, dailyToken } = await res.json();
+        let roomUrl, dailyToken;
+
+        // If warm-start is enabled, use prefetched session or wait for it
+        if (this._warmStart) {
+          if (this._prefetchedSession) {
+            console.log("<iwy-corner-circular> warm-start: using prefetched session");
+            ({ roomUrl, dailyToken } = this._prefetchedSession);
+          } else if (this._prefetchPromise) {
+            console.log("<iwy-corner-circular> warm-start: waiting for prefetch to complete...");
+            const data = await this._prefetchPromise;
+            ({ roomUrl, dailyToken } = data);
+          } else {
+            // Warm-start enabled but no prefetch initiated (shouldn't happen normally)
+            console.warn("<iwy-corner-circular> warm-start enabled but no prefetch available, fetching now...");
+            const res = await fetch(this._sessionEndpoint, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ agentId: this._agentId }),
+            });
+            if (!res.ok) throw new Error(`Session request failed (${res.status})`);
+            ({ roomUrl, dailyToken } = await res.json());
+          }
+        } else {
+          // Normal flow: fetch session from backend
+          const res = await fetch(this._sessionEndpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ agentId: this._agentId }),
+          });
+          if (!res.ok) throw new Error(`Session request failed (${res.status})`);
+          ({ roomUrl, dailyToken } = await res.json());
+        }
 
         // Initialize Pipecat client with DailyTransport
         const pipecatConfig = {

@@ -1,3 +1,51 @@
+# [1.8.0](https://github.com/iwy-ai/live-widgets/compare/v1.7.0...v1.8.0) (2025-11-22)
+
+
+### Features
+
+* **Warm-Start Mode**: Add `warm-start` attribute to `iwy-corner-circular` for pre-fetching session data
+* **Performance Optimization**: Session data fetched on component load, significantly reducing connection latency
+* **Graceful Handling**: Automatic synchronization if user clicks before prefetch completes
+* **Backward Compatible**: Feature is opt-in via `warm-start="true"` attribute, default behavior unchanged
+
+### Technical Details
+
+* New `warm-start` attribute (boolean, default: `false`)
+* Pre-fetch logic in `_prefetchSession()` method
+* Modified `_startCall()` to use cached session data when available
+* Race condition handling: waits for prefetch promise if user clicks early
+* Console logging for debugging prefetch operations
+
+### Benefits
+
+- **Reduced Latency**: Session already fetched when user clicks avatar
+- **Better UX**: Near-instant room joining (no fetch delay)
+- **Reliable**: Handles edge cases including early clicks and fetch failures
+- **Safe**: Falls back to normal fetch if prefetch unavailable
+
+### Usage
+
+```html
+<!-- Enable warm-start for faster connections -->
+<iwy-corner-circular agentid="your-agent-id" warm-start="true"></iwy-corner-circular>
+
+<!-- Or use boolean attribute syntax -->
+<iwy-corner-circular agentid="your-agent-id" warm-start></iwy-corner-circular>
+```
+
+```tsx
+// TypeScript/React
+import '@iwy/live-widgets/corner-circular';
+<iwy-corner-circular agentid="your-agent-id" warm-start={true}></iwy-corner-circular>
+```
+
+### How It Works
+
+1. Component loads → Prefetch session from backend (if `warm-start="true"`)
+2. Session data stored in memory
+3. User clicks avatar → Use cached data (instant) or wait for prefetch (if still pending)
+4. Join room and start conversation
+
 # [1.7.0](https://github.com/iwy-ai/live-widgets/compare/v1.6.1...v1.7.0) (2025-11-22)
 
 
