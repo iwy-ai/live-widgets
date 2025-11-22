@@ -30,7 +30,7 @@ npm install @iwy/live-widgets
 
 ```html
 <!-- Example: Load the live-avatar component -->
-<script src="https://unpkg.com/@iwy/live-widgets@1.2.0/dist/live-avatar.min.js"></script>
+<script src="https://unpkg.com/@iwy/live-widgets@latest/dist/live-avatar.min.js"></script>
 ```
 
 ### Basic Usage Example
@@ -48,7 +48,7 @@ npm install @iwy/live-widgets
     <live-avatar agentid="your-agent-id"></live-avatar>
 
     <!-- Load the component script -->
-    <script src="https://unpkg.com/@iwy/live-widgets@1.2.0/dist/live-avatar.min.js"></script>
+    <script src="https://unpkg.com/@iwy/live-widgets@latest/dist/live-avatar.min.js"></script>
 </body>
 </html>
 ```

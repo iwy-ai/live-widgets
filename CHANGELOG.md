@@ -1,3 +1,32 @@
+# [1.9.0](https://github.com/iwy-ai/live-widgets/compare/v1.8.0...v1.9.0) (2025-11-22)
+
+
+### Features
+
+* **Headless SDK Warm-Start**: Added `warmStart` configuration option to `LiveAvatarSDK` for pre-fetching session data
+* **Performance**: Reduced connection latency for headless implementations by enabling session pre-loading
+* **API Update**: `LiveAvatarConfig` interface now supports optional `warmStart` boolean property
+* **SDK Improvements**: Enhanced state tracking and session management logic in the headless SDK
+
+### Technical Details
+
+* Updated `LiveAvatarSDK` constructor to initiate session prefetch when `warmStart: true`
+* Added `prefetchedSession` state management to store early session data
+* Modified `connect()` flow to prioritize cached session data
+* Added verbose logging for warm-start lifecycle events
+
+### Usage
+
+```typescript
+const avatar = new LiveAvatarSDK({
+  agentId: 'your-agent-id',
+  warmStart: true // Enable pre-fetching
+});
+
+// Connection will be faster as session is already loaded
+await avatar.connect();
+```
+
 # [1.8.0](https://github.com/iwy-ai/live-widgets/compare/v1.7.0...v1.8.0) (2025-11-22)
 
 

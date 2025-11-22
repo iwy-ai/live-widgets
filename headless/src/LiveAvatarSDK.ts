@@ -87,6 +87,10 @@ export class LiveAvatarSDK {
   private _isMicEnabled: boolean;
   private _currentError: Error | null = null;
 
+  // Session management
+  private sessionPromise: Promise<SessionResponse> | null = null;
+  private prefetchedSession: SessionResponse | null = null;
+
   /**
    * Creates a new LiveAvatarSDK instance
    *
@@ -99,11 +103,17 @@ export class LiveAvatarSDK {
       enableAudioVisualization: true,
       enableMic: true,
       enableCam: false,
+      warmStart: false,
       ...config,
     };
     this.callbacks = callbacks;
     this._connectionState = 'disconnected' as ConnectionState;
     this._isMicEnabled = this.config.enableMic ?? true;
+
+    // Pre-fetch session if warm start is enabled
+    if (this.config.warmStart) {
+      this.preloadSession();
+    }
   }
 
   /**
@@ -163,8 +173,30 @@ export class LiveAvatarSDK {
     this.callbacks.onConnecting?.();
 
     try {
-      // Request session from backend
-      const session = await this.requestSession();
+      // Request session from backend (or use pre-fetched)
+      let session: SessionResponse;
+
+      if (this.config.warmStart) {
+        if (this.prefetchedSession) {
+          console.log('Warm start: Using pre-fetched session');
+          session = this.prefetchedSession;
+        } else if (this.sessionPromise) {
+          console.log('Warm start: Waiting for pre-fetch to complete...');
+          try {
+            session = await this.sessionPromise;
+          } catch (error) {
+            console.warn('Pre-fetched session failed, retrying fresh request...');
+            this.sessionPromise = null;
+            this.prefetchedSession = null;
+            session = await this.requestSession();
+          }
+        } else {
+          console.warn('Warm start enabled but no pre-fetch found, fetching now...');
+          session = await this.requestSession();
+        }
+      } else {
+        session = await this.requestSession();
+      }
 
       // Initialize Pipecat client
       this.client = new PipecatClient({
@@ -320,6 +352,23 @@ export class LiveAvatarSDK {
     }
 
     return response.json();
+  }
+
+  /**
+   * Pre-fetch session for warm start
+   */
+  private preloadSession(): void {
+    console.log('Warm start: Pre-fetching session...');
+    this.sessionPromise = this.requestSession().then((session) => {
+      console.log('Warm start: Session pre-fetched successfully');
+      this.prefetchedSession = session;
+      return session;
+    });
+    // Prevent unhandled promise rejection warnings if connection isn't attempted
+    this.sessionPromise.catch((err) => {
+      console.debug('Warm start session pre-fetch failed (will be retried on connect):', err);
+      this.prefetchedSession = null;
+    });
   }
 
   /**
@@ -502,6 +551,8 @@ export class LiveAvatarSDK {
     this.stopAudioVisualization();
     this.client = null;
     this._connectionState = 'disconnected' as ConnectionState;
+    this.sessionPromise = null;
+    this.prefetchedSession = null;
   }
 
   /**

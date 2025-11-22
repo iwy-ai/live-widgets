@@ -72,6 +72,12 @@ export interface LiveAvatarConfig {
    * @default false
    */
   enableCam?: boolean;
+
+  /**
+   * Pre-fetch session on initialization for faster connection
+   * @default false
+   */
+  warmStart?: boolean;
 }
 
 /**

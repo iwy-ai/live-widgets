@@ -197,6 +197,7 @@ new LiveAvatarSDK(config: LiveAvatarConfig, callbacks?: LiveAvatarCallbacks)
 | `enableAudioVisualization` | boolean | No | `true` | Enable audio level callbacks |
 | `enableMic` | boolean | No | `true` | Enable microphone by default |
 | `enableCam` | boolean | No | `false` | Enable camera (if needed) |
+| `warmStart` | boolean | No | `false` | Pre-fetch session on init for faster connection |
 
 ### Callbacks (`LiveAvatarCallbacks`)
 
@@ -409,6 +410,21 @@ document.getElementById('agent2-btn').onclick = () => switchAgent('agent-2');
 ```
 
 ## Advanced Features
+
+### Warm-Start (Faster Connections)
+
+Enable `warmStart` to pre-fetch the session from the backend immediately when the SDK is initialized. This reduces the latency when `connect()` is called.
+
+```javascript
+const avatar = new LiveAvatarSDK({
+  agentId: 'your-agent-id',
+  warmStart: true, // Pre-fetch session
+});
+
+// Later, when user clicks connect...
+// Connection will be much faster as session is already ready
+await avatar.connect();
+```
 
 ### Custom Session Endpoint
 
