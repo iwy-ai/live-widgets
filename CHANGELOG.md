@@ -1,3 +1,33 @@
+## [1.9.3](https://github.com/iwy-ai/live-widgets/compare/v1.9.2...v1.9.3) (2025-11-23)
+
+
+### Features
+
+* **Headless SDK**: Automatic session prefetching after call ends for faster reconnection
+* **Warm Start Optimization**: Pre-fetch next session immediately when a call disconnects
+* **Performance**: Eliminate latency for subsequent calls by prefetching in background
+
+### Technical Details
+
+* Added automatic `preloadSession()` call in `handleDisconnect()` when warmStart is enabled
+* Added `_isDestroyed` flag to prevent prefetching when SDK is being destroyed
+* Session is fetched in background immediately after call ends
+* Next call will use pre-fetched session for instant connection
+
+### Impact
+
+- Near-instant reconnection for subsequent calls
+- Better user experience for multi-call sessions
+- Seamless warm start behavior across entire session lifecycle
+- No additional API calls if user doesn't reconnect
+
+### Usage
+
+When `warmStart: true` is enabled, the SDK now automatically:
+1. Pre-fetches session on initialization
+2. Pre-fetches new session after each call ends
+3. Uses cached session for next call
+
 ## [1.9.2](https://github.com/iwy-ai/live-widgets/compare/v1.9.1...v1.9.2) (2025-11-23)
 
 

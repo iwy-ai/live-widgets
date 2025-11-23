@@ -86,6 +86,7 @@ export class LiveAvatarSDK {
   private _connectionState: ConnectionState;
   private _isMicEnabled: boolean;
   private _currentError: Error | null = null;
+  private _isDestroyed: boolean = false;
 
   // Session management
   private sessionPromise: Promise<SessionResponse> | null = null;
@@ -537,6 +538,12 @@ export class LiveAvatarSDK {
     this._connectionState = 'disconnected' as ConnectionState;
     this.cleanup();
     this.callbacks.onDisconnected?.();
+
+    // Pre-fetch session for next call if warm start is enabled and SDK not destroyed
+    if (this.config.warmStart && !this._isDestroyed) {
+      console.log('[iwy] Call ended, pre-fetching session for next call');
+      this.preloadSession();
+    }
   }
 
   /**
@@ -564,6 +571,7 @@ export class LiveAvatarSDK {
    * Destroy the SDK instance and clean up all resources
    */
   destroy(): void {
+    this._isDestroyed = true;
     this.disconnect();
     this.cleanup();
   }
