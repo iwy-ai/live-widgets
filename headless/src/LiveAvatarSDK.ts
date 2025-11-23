@@ -244,10 +244,12 @@ export class LiveAvatarSDK {
       this.setupTrackListeners();
 
       // Connect to Daily room
+      console.log('🚀 Joining WebRTC room...');
       await this.client.connect({
         url: session.roomUrl,
         token: session.dailyToken,
       });
+      console.log('✅ WebRTC room joined successfully');
     } catch (err) {
       this.handleError(err instanceof Error ? err : new Error('Connection failed'));
       throw err;
@@ -337,6 +339,7 @@ export class LiveAvatarSDK {
    * Request a session from the backend
    */
   private async requestSession(): Promise<SessionResponse> {
+    console.log('🔄 Fetching session from endpoint...');
     const response = await fetch(this.config.sessionEndpoint!, {
       method: 'POST',
       headers: {
@@ -351,7 +354,9 @@ export class LiveAvatarSDK {
       throw new Error(`Session request failed: ${response.status} ${response.statusText}`);
     }
 
-    return response.json();
+    const session = await response.json();
+    console.log('✅ Session fetched successfully');
+    return session;
   }
 
   /**

@@ -1,3 +1,25 @@
+## [1.9.1](https://github.com/iwy-ai/live-widgets/compare/v1.9.0...v1.9.1) (2025-11-23)
+
+
+### Bug Fixes
+
+* **Headless SDK**: Add console logging for session fetching and WebRTC room joining
+* **Developer Experience**: Improve debugging visibility with 4 strategic console logs tracking initialization flow
+* **Cold/Warm Start**: Better feedback on timing and success/failure of prefetch operations
+
+### Technical Details
+
+* Added console logs before/after session endpoint fetch
+* Added console logs before/after WebRTC room connection
+* Provides clear browser console feedback for debugging connection issues
+* Helps identify whether issues are with session fetching or WebRTC connection
+
+### Impact
+
+- Better debugging experience for developers
+- Clear visibility into warm-start vs cold-start behavior
+- Easier troubleshooting of connection timing and failures
+
 # [1.9.0](https://github.com/iwy-ai/live-widgets/compare/v1.8.0...v1.9.0) (2025-11-22)
 
 
