@@ -1,3 +1,26 @@
+## [1.9.2](https://github.com/iwy-ai/live-widgets/compare/v1.9.1...v1.9.2) (2025-11-23)
+
+
+### Bug Fixes
+
+* **Headless SDK**: Add [iwy] prefix to all console logs for consistent branding
+* **Console Logging**: Standardize all debug output with professional formatting
+* **Developer Experience**: Improve log readability with consistent [iwy] namespace prefix
+
+### Technical Details
+
+* Updated all console.log, console.warn, console.error, and console.debug statements
+* Added [iwy] prefix to 21 console statements across the SDK
+* Removed emojis and enhanced professional appearance
+* Consistent format: `[iwy] Message text`
+
+### Impact
+
+- Better log filtering in browser console (filter by "[iwy]")
+- Professional appearance suitable for production environments
+- Easier identification of SDK logs vs application logs
+- Consistent branding across all log messages
+
 ## [1.9.1](https://github.com/iwy-ai/live-widgets/compare/v1.9.0...v1.9.1) (2025-11-23)
 
 

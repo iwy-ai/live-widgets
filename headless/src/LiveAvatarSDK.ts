@@ -164,7 +164,7 @@ export class LiveAvatarSDK {
    */
   async connect(): Promise<void> {
     if (this.isConnecting || this.isConnected) {
-      console.warn('Already connected or connecting');
+      console.warn('[iwy] Already connected or connecting');
       return;
     }
 
@@ -178,20 +178,20 @@ export class LiveAvatarSDK {
 
       if (this.config.warmStart) {
         if (this.prefetchedSession) {
-          console.log('Warm start: Using pre-fetched session');
+          console.log('[iwy] Warm start: Using pre-fetched session');
           session = this.prefetchedSession;
         } else if (this.sessionPromise) {
-          console.log('Warm start: Waiting for pre-fetch to complete...');
+          console.log('[iwy] Warm start: Waiting for pre-fetch to complete');
           try {
             session = await this.sessionPromise;
           } catch (error) {
-            console.warn('Pre-fetched session failed, retrying fresh request...');
+            console.warn('[iwy] Pre-fetched session failed, retrying fresh request');
             this.sessionPromise = null;
             this.prefetchedSession = null;
             session = await this.requestSession();
           }
         } else {
-          console.warn('Warm start enabled but no pre-fetch found, fetching now...');
+          console.warn('[iwy] Warm start enabled but no pre-fetch found, fetching now');
           session = await this.requestSession();
         }
       } else {
@@ -244,12 +244,12 @@ export class LiveAvatarSDK {
       this.setupTrackListeners();
 
       // Connect to Daily room
-      console.log('🚀 Joining WebRTC room...');
+      console.log('[iwy] Connecting via WebRTC...');
       await this.client.connect({
         url: session.roomUrl,
         token: session.dailyToken,
       });
-      console.log('✅ WebRTC room joined successfully');
+      console.log('[iwy] WebRTC connection established.');
     } catch (err) {
       this.handleError(err instanceof Error ? err : new Error('Connection failed'));
       throw err;
@@ -265,7 +265,7 @@ export class LiveAvatarSDK {
     try {
       await this.client.disconnect();
     } catch (err) {
-      console.error('Error during disconnect:', err);
+      console.error('[iwy] Error during disconnect:', err);
     }
 
     this.cleanup();
@@ -339,7 +339,7 @@ export class LiveAvatarSDK {
    * Request a session from the backend
    */
   private async requestSession(): Promise<SessionResponse> {
-    console.log('🔄 Fetching session from endpoint...');
+    console.log('[iwy] Requesting session from endpoint');
     const response = await fetch(this.config.sessionEndpoint!, {
       method: 'POST',
       headers: {
@@ -355,7 +355,7 @@ export class LiveAvatarSDK {
     }
 
     const session = await response.json();
-    console.log('✅ Session fetched successfully');
+    console.log('[iwy] Session request completed');
     return session;
   }
 
@@ -363,15 +363,15 @@ export class LiveAvatarSDK {
    * Pre-fetch session for warm start
    */
   private preloadSession(): void {
-    console.log('Warm start: Pre-fetching session...');
+    console.log('[iwy] Warm start: Pre-fetching session');
     this.sessionPromise = this.requestSession().then((session) => {
-      console.log('Warm start: Session pre-fetched successfully');
+      console.log('[iwy] Warm start: Session pre-fetched successfully');
       this.prefetchedSession = session;
       return session;
     });
     // Prevent unhandled promise rejection warnings if connection isn't attempted
     this.sessionPromise.catch((err) => {
-      console.debug('Warm start session pre-fetch failed (will be retried on connect):', err);
+      console.debug('[iwy] Warm start session pre-fetch failed (will be retried on connect):', err);
       this.prefetchedSession = null;
     });
   }
@@ -383,7 +383,7 @@ export class LiveAvatarSDK {
     if (!this.client) return;
 
     this.client.on(RTVIEvent.TrackStarted, (track, participant) => {
-      console.log(`Track started: ${track.kind} from ${participant?.local ? 'local' : 'bot'}`);
+      console.log(`[iwy] Track started: ${track.kind} from ${participant?.local ? 'local' : 'bot'}`);
 
       if (!participant?.local) {
         // Bot tracks
@@ -408,7 +408,7 @@ export class LiveAvatarSDK {
     });
 
     this.client.on(RTVIEvent.TrackStopped, (track, participant) => {
-      console.log(`Track stopped: ${track.kind} from ${participant?.name || 'unknown'}`);
+      console.log(`[iwy] Track stopped: ${track.kind} from ${participant?.name || 'unknown'}`);
     });
   }
 
@@ -419,7 +419,7 @@ export class LiveAvatarSDK {
     if (!this.client) return;
 
     const tracks = this.client.tracks();
-    console.log('Setting up media tracks:', {
+    console.log('[iwy] Setting up media tracks:', {
       botAudio: !!tracks.bot?.audio,
       botVideo: !!tracks.bot?.video,
       localAudio: !!tracks.local?.audio,
@@ -456,7 +456,7 @@ export class LiveAvatarSDK {
   private attachAudioTrack(track: MediaStreamTrack, element: HTMLAudioElement): void {
     element.srcObject = new MediaStream([track]);
     element.play().catch((err) => {
-      console.error('Error playing audio:', err);
+      console.error('[iwy] Error playing audio:', err);
     });
   }
 
@@ -466,7 +466,7 @@ export class LiveAvatarSDK {
   private attachVideoTrack(track: MediaStreamTrack, element: HTMLVideoElement): void {
     element.srcObject = new MediaStream([track]);
     element.play().catch((err) => {
-      console.error('Error playing video:', err);
+      console.error('[iwy] Error playing video:', err);
     });
   }
 
@@ -508,7 +508,7 @@ export class LiveAvatarSDK {
 
       updateAudioLevel();
     } catch (err) {
-      console.error('Error starting audio visualization:', err);
+      console.error('[iwy] Error starting audio visualization:', err);
     }
   }
 
@@ -522,7 +522,7 @@ export class LiveAvatarSDK {
     }
 
     if (this.audioContext) {
-      this.audioContext.close().catch(console.error);
+      this.audioContext.close().catch((err) => console.error('[iwy] Error closing audio context:', err));
       this.audioContext = null;
     }
 
@@ -543,7 +543,7 @@ export class LiveAvatarSDK {
    * Handle errors
    */
   private handleError(error: Error): void {
-    console.error('LiveAvatarSDK error:', error);
+    console.error('[iwy] LiveAvatarSDK error:', error);
     this._currentError = error;
     this._connectionState = 'error' as ConnectionState;
     this.callbacks.onError?.(error);
