@@ -4,13 +4,17 @@ Embeddable AI avatar and audio visualizer widgets for live conversations. This p
 
 ## Components
 
-This package provides three interactive components for Pipecat voice AI applications:
+This package provides seven interactive components for Pipecat voice AI applications:
 
 | Component | Description | Use Case |
 |-----------|-------------|----------|
 | **[live-avatar](./live-avatar/README.md)** | Circular floating bubble in bottom-right corner | Non-intrusive avatar widget similar to chat bubbles |
 | **[live-avatar-rectangular](./live-avatar-rectangular/README.md)** | Rectangular video container that fills parent div | Embedded video chat experience in your page layout |
 | **[audio-visualizer](./audio-visualizer/README.md)** | Audio-only WebGL plasma visualizer | Audio-first experiences without video streaming |
+| **[headless](./headless/README.md)** | Framework-agnostic SDK for custom UI development | Build your own UI with full control over styling and behavior |
+| **[iwy-corner-circular](./iwy-corner-circular/README.md)** | Circular floating bubble with video streaming | Non-intrusive floating avatar with expandable controls |
+| **[webrtc-live-avatar-http](./webrtc-live-avatar-http/README.md)** | Pure WebRTC widget with HTTP signaling | Simplified signaling without WebSocket dependency |
+| **[webrtc-live-avatar-rectangular](./webrtc-live-avatar-rectangular/README.md)** | Pure WebRTC widget with WebSocket signaling | Direct peer-to-peer connection without Pipecat/Daily.co |
 
 Click any component name above to view detailed documentation, usage examples, and configuration options.
 
@@ -72,7 +76,7 @@ function App() {
 
 ## Features
 
-- **Several Component Types** - Floating bubble, rectangular container, audio visualizer ...
+- **Multiple Component Types** - Floating bubble, rectangular container, audio visualizer, headless SDK, and pure WebRTC widgets
 - **Pipecat Integration** - Built-in support for Pipecat Client SDK with Daily transport
 - **Easy Integration** - Web components work with any framework (React, Vue, Angular, etc.)
 - **Responsive Design** - Components adapt to their containers
@@ -101,6 +105,10 @@ For detailed documentation on each component, see:
 - **[Live Avatar](./live-avatar/README.md)** - Floating bubble widget
 - **[Live Avatar Rectangular](./live-avatar-rectangular/README.md)** - Rectangular container widget
 - **[Audio Visualizer](./audio-visualizer/README.md)** - Audio-only visualizer
+- **[Headless SDK](./headless/README.md)** - Custom UI development SDK
+- **[iwy-corner-circular](./iwy-corner-circular/README.md)** - Circular floating bubble widget
+- **[WebRTC HTTP](./webrtc-live-avatar-http/README.md)** - HTTP signaling WebRTC widget
+- **[WebRTC Rectangular](./webrtc-live-avatar-rectangular/README.md)** - WebSocket signaling WebRTC widget
 
 ## Development
 
