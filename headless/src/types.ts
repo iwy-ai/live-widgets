@@ -32,6 +32,40 @@
 
 /**
  * Configuration options for LiveAvatarSDK
+ *
+ * ## Media Handling
+ *
+ * There are two approaches for handling video/audio:
+ *
+ * **1. SDK-managed (recommended):** Pass `videoElement` and/or `audioElement`.
+ * The SDK will automatically attach tracks when they become available.
+ *
+ * **2. Manual:** Don't pass elements, handle attachment in `onVideoTrack`/`onAudioTrack` callbacks.
+ *
+ * You can use both approaches together - the SDK prevents duplicate attachment.
+ * However, for clarity, it's recommended to choose one approach.
+ *
+ * @example SDK-managed
+ * ```typescript
+ * const avatar = new LiveAvatarSDK({
+ *   agentId: 'demo',
+ *   videoElement: document.getElementById('video'),
+ *   audioElement: document.getElementById('audio'),
+ * });
+ * ```
+ *
+ * @example Manual handling
+ * ```typescript
+ * const avatar = new LiveAvatarSDK(
+ *   { agentId: 'demo' },
+ *   {
+ *     onVideoTrack: (track) => {
+ *       myVideo.srcObject = new MediaStream([track]);
+ *       myVideo.play();
+ *     },
+ *   }
+ * );
+ * ```
  */
 export interface LiveAvatarConfig {
   /**
@@ -40,12 +74,22 @@ export interface LiveAvatarConfig {
   agentId: string;
 
   /**
-   * Video element to attach bot video stream to
+   * Video element to attach bot video stream to.
+   *
+   * If provided, the SDK will automatically attach the bot's video track
+   * to this element when it becomes available.
+   *
+   * @see LiveAvatarCallbacks.onVideoTrack for manual handling
    */
   videoElement?: HTMLVideoElement;
 
   /**
-   * Audio element to attach bot audio stream to
+   * Audio element to attach bot audio stream to.
+   *
+   * If provided, the SDK will automatically attach the bot's audio track
+   * to this element when it becomes available.
+   *
+   * @see LiveAvatarCallbacks.onAudioTrack for manual handling
    */
   audioElement?: HTMLAudioElement;
 
@@ -103,27 +147,55 @@ export interface LiveAvatarCallbacks {
   onError?: (error: Error) => void;
 
   /**
-   * Called when bot video track is available
+   * Called when bot video track is available.
+   *
+   * **Use cases:**
+   * - **Notification only:** If you provided `videoElement` in config, the SDK handles attachment.
+   *   Use this callback for logging, analytics, or UI updates.
+   * - **Manual handling:** If you didn't provide `videoElement`, use this to attach the track yourself:
+   *   ```typescript
+   *   onVideoTrack: (track) => {
+   *     myVideo.srcObject = new MediaStream([track]);
+   *     myVideo.play().catch(console.error);
+   *   }
+   *   ```
+   *
+   * @see LiveAvatarConfig.videoElement for automatic attachment
    */
   onVideoTrack?: (track: MediaStreamTrack) => void;
 
   /**
-   * Called when bot audio track is available
+   * Called when bot audio track is available.
+   *
+   * **Use cases:**
+   * - **Notification only:** If you provided `audioElement` in config, the SDK handles attachment.
+   *   Use this callback for logging, analytics, or UI updates.
+   * - **Manual handling:** If you didn't provide `audioElement`, use this to attach the track yourself:
+   *   ```typescript
+   *   onAudioTrack: (track) => {
+   *     myAudio.srcObject = new MediaStream([track]);
+   *     myAudio.play().catch(console.error);
+   *   }
+   *   ```
+   *
+   * @see LiveAvatarConfig.audioElement for automatic attachment
    */
   onAudioTrack?: (track: MediaStreamTrack) => void;
 
   /**
-   * Called when local audio track is available
+   * Called when local audio track (user's microphone) is available.
+   *
+   * Useful for audio visualization or debugging.
    */
   onLocalAudioTrack?: (track: MediaStreamTrack) => void;
 
   /**
-   * Called with user transcript updates
+   * Called with user transcript updates (speech-to-text from user's microphone)
    */
   onUserTranscript?: (data: TranscriptData) => void;
 
   /**
-   * Called with bot transcript updates
+   * Called with bot transcript updates (text-to-speech output from bot)
    */
   onBotTranscript?: (data: TranscriptData) => void;
 

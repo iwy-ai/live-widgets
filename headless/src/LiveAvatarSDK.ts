@@ -80,6 +80,9 @@ export class LiveAvatarSDK {
   private _currentError: Error | null = null;
   private _isDestroyed: boolean = false;
 
+  // Track attachment state to prevent duplicate attachments (which cause AbortError)
+  private attachedTracks = new Set<string>();
+
   // Session management
   private sessionPromise: Promise<SessionResponse> | null = null;
   private prefetchedSession: SessionResponse | null = null;
@@ -438,9 +441,17 @@ export class LiveAvatarSDK {
   }
 
   /**
-   * Attach audio track to an audio element
+   * Attach audio track to an audio element.
+   * Prevents duplicate attachment which causes AbortError.
    */
   private attachAudioTrack(track: MediaStreamTrack, element: HTMLAudioElement): void {
+    const trackKey = `audio-${track.id}`;
+    if (this.attachedTracks.has(trackKey)) {
+      console.debug('[iwy] Audio track already attached, skipping:', track.id);
+      return;
+    }
+    this.attachedTracks.add(trackKey);
+
     element.srcObject = new MediaStream([track]);
     element.play().catch((err) => {
       console.error('[iwy] Error playing audio:', err);
@@ -448,9 +459,17 @@ export class LiveAvatarSDK {
   }
 
   /**
-   * Attach video track to a video element
+   * Attach video track to a video element.
+   * Prevents duplicate attachment which causes AbortError.
    */
   private attachVideoTrack(track: MediaStreamTrack, element: HTMLVideoElement): void {
+    const trackKey = `video-${track.id}`;
+    if (this.attachedTracks.has(trackKey)) {
+      console.debug('[iwy] Video track already attached, skipping:', track.id);
+      return;
+    }
+    this.attachedTracks.add(trackKey);
+
     element.srcObject = new MediaStream([track]);
     element.play().catch((err) => {
       console.error('[iwy] Error playing video:', err);
@@ -490,6 +509,7 @@ export class LiveAvatarSDK {
     this._connectionState = 'disconnected' as ConnectionState;
     this.sessionPromise = null;
     this.prefetchedSession = null;
+    this.attachedTracks.clear();
   }
 
   /**

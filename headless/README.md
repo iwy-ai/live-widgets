@@ -388,6 +388,51 @@ document.getElementById('agent2-btn').onclick = () => switchAgent('agent-2');
 
 ## Advanced Features
 
+### Media Handling
+
+The SDK supports two approaches for handling bot video and audio. **Choose one approach** for clarity.
+
+#### Mode 1: SDK-Managed (Recommended)
+
+Pass `videoElement` and/or `audioElement` in the config. The SDK automatically attaches tracks when they become available.
+
+```javascript
+const avatar = new LiveAvatarSDK({
+  agentId: 'your-agent-id',
+  videoElement: document.getElementById('my-video'),
+  audioElement: document.getElementById('my-audio'),
+});
+
+// That's it! SDK handles track attachment automatically
+await avatar.connect();
+```
+
+#### Mode 2: Manual Control
+
+Don't pass elements in config. Handle track attachment yourself via callbacks.
+
+```javascript
+const avatar = new LiveAvatarSDK(
+  { agentId: 'your-agent-id' },
+  {
+    onVideoTrack: (track) => {
+      const video = document.getElementById('my-video');
+      video.srcObject = new MediaStream([track]);
+      video.play().catch(console.error);
+    },
+    onAudioTrack: (track) => {
+      const audio = document.getElementById('my-audio');
+      audio.srcObject = new MediaStream([track]);
+      audio.play().catch(console.error);
+    },
+  }
+);
+
+await avatar.connect();
+```
+
+> **Note:** The SDK internally prevents duplicate track attachment, so mixing modes won't cause errors. However, choosing one approach makes your code clearer.
+
 ### Warm-Start (Faster Connections)
 
 By default, `warmStart` is enabled which pre-fetches the session from the backend immediately when the SDK is initialized. This reduces the latency when `connect()` is called.
