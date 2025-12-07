@@ -274,10 +274,9 @@
                 agentId: 'demo', // Replace with your agent ID
                 videoElement: videoEl,
                 audioElement: audioEl,
-                enableAudioVisualization: true,
                 enableMic: true,
                 enableCam: false,
-                warmStart: true, // Enable warm start for faster connection
+                // warmStart: true is the default - session is pre-fetched automatically
             },
             {
                 onConnecting: () => {
@@ -310,9 +309,6 @@
                     errorEl.textContent = error.message;
                     errorEl.classList.add('visible');
                     connectBtn.disabled = false;
-                },
-                onAudioLevel: (level) => {
-                    audioBar.style.width = `${level * 100}%`;
                 },
                 onBotConnected: () => {
                     console.log('🤖 Bot joined the call!');

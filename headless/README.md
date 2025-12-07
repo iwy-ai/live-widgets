@@ -1,6 +1,6 @@
 # LiveAvatarSDK - Headless AI Avatar SDK
 
-A framework-agnostic, headless SDK for building custom AI avatar interfaces with Pipecat. Build your own UI while we handle the WebRTC, audio visualization, and Pipecat integration.
+A framework-agnostic, headless SDK for building custom AI avatar interfaces with Pipecat. Build your own UI while we handle the WebRTC and Pipecat integration.
 
 ## Why Headless?
 
@@ -55,10 +55,6 @@ const avatar = new LiveAvatarSDK(
   },
   {
     onConnected: () => console.log('Connected!'),
-    onAudioLevel: (level) => {
-      // Update your custom visualization
-      document.getElementById('audio-bar').style.width = `${level * 100}%`;
-    },
   }
 );
 
@@ -90,7 +86,6 @@ export default function CustomAvatar() {
   const avatarRef = useRef<LiveAvatarSDK | null>(null);
 
   const [isConnected, setIsConnected] = useState(false);
-  const [audioLevel, setAudioLevel] = useState(0);
 
   useEffect(() => {
     const avatar = new LiveAvatarSDK(
@@ -102,7 +97,6 @@ export default function CustomAvatar() {
       {
         onConnected: () => setIsConnected(true),
         onDisconnected: () => setIsConnected(false),
-        onAudioLevel: (level) => setAudioLevel(level),
       }
     );
 
@@ -122,8 +116,6 @@ export default function CustomAvatar() {
       <button onClick={() => avatarRef.current?.disconnect()}>
         Disconnect
       </button>
-
-      <div className="audio-bar" style={{ width: `${audioLevel * 100}%` }} />
     </div>
   );
 }
@@ -139,8 +131,6 @@ export default function CustomAvatar() {
 
     <button @click="handleConnect">Connect</button>
     <button @click="handleDisconnect">Disconnect</button>
-
-    <div class="audio-bar" :style="{ width: `${audioLevel * 100}%` }" />
   </div>
 </template>
 
@@ -150,7 +140,6 @@ import { LiveAvatarSDK } from '@iwy/live-widgets/headless';
 
 const videoRef = ref(null);
 const audioRef = ref(null);
-const audioLevel = ref(0);
 
 let avatar = null;
 
@@ -161,11 +150,7 @@ onMounted(() => {
       videoElement: videoRef.value,
       audioElement: audioRef.value,
     },
-    {
-      onAudioLevel: (level) => {
-        audioLevel.value = level;
-      },
-    }
+    {}
   );
 });
 
@@ -191,13 +176,11 @@ new LiveAvatarSDK(config: LiveAvatarConfig, callbacks?: LiveAvatarCallbacks)
 | Property | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
 | `agentId` | string | Yes | - | Your Pipecat agent ID |
-| `sessionEndpoint` | string | No | `https://api.iwy.ai/v1/start-agent-session` | Custom session endpoint |
 | `videoElement` | HTMLVideoElement | No | - | Video element for bot video |
 | `audioElement` | HTMLAudioElement | No | - | Audio element for bot audio |
-| `enableAudioVisualization` | boolean | No | `true` | Enable audio level callbacks |
 | `enableMic` | boolean | No | `true` | Enable microphone by default |
 | `enableCam` | boolean | No | `false` | Enable camera (if needed) |
-| `warmStart` | boolean | No | `false` | Pre-fetch session on init for faster connection |
+| `warmStart` | boolean | No | `true` | Pre-fetch session on init for faster connection |
 
 ### Callbacks (`LiveAvatarCallbacks`)
 
@@ -209,7 +192,6 @@ new LiveAvatarSDK(config: LiveAvatarConfig, callbacks?: LiveAvatarCallbacks)
 | `onBotConnected` | `()` | Called when bot joins |
 | `onBotReady` | `()` | Called when bot is ready |
 | `onError` | `(error: Error)` | Called on errors |
-| `onAudioLevel` | `(level: number)` | Audio level (0-1) updates |
 | `onVideoTrack` | `(track: MediaStreamTrack)` | Bot video track available |
 | `onAudioTrack` | `(track: MediaStreamTrack)` | Bot audio track available |
 | `onLocalAudioTrack` | `(track: MediaStreamTrack)` | Local audio track available |
@@ -318,7 +300,7 @@ interface TranscriptData {
 
 ## Complete Examples
 
-### Custom Dashboard with Audio Visualization
+### Custom Dashboard
 
 ```javascript
 import { LiveAvatarSDK } from '@iwy/live-widgets/headless';
@@ -344,11 +326,6 @@ const avatar = new LiveAvatarSDK(
     onError: (error) => {
       updateStatus('Error: ' + error.message);
       showErrorNotification(error);
-    },
-    onAudioLevel: (level) => {
-      // Custom audio visualization
-      updateAudioBars(level);
-      pulseAvatar(level);
     },
     onUserTranscript: (data) => {
       if (data.final) {
@@ -413,35 +390,22 @@ document.getElementById('agent2-btn').onclick = () => switchAgent('agent-2');
 
 ### Warm-Start (Faster Connections)
 
-Enable `warmStart` to pre-fetch the session from the backend immediately when the SDK is initialized. This reduces the latency when `connect()` is called.
+By default, `warmStart` is enabled which pre-fetches the session from the backend immediately when the SDK is initialized. This reduces the latency when `connect()` is called.
 
 ```javascript
 const avatar = new LiveAvatarSDK({
   agentId: 'your-agent-id',
-  warmStart: true, // Pre-fetch session
+  // warmStart: true is the default - session is pre-fetched automatically
 });
 
-// Later, when user clicks connect...
-// Connection will be much faster as session is already ready
+// When user clicks connect, connection will be faster as session is already ready
 await avatar.connect();
-```
 
-### Custom Session Endpoint
-
-```javascript
+// To disable warm start:
 const avatar = new LiveAvatarSDK({
   agentId: 'your-agent-id',
-  sessionEndpoint: 'https://your-backend.com/api/sessions',
+  warmStart: false, // Disable pre-fetching
 });
-```
-
-Your endpoint should return:
-
-```json
-{
-  "roomUrl": "https://your-domain.daily.co/room-name",
-  "dailyToken": "your-daily-token"
-}
 ```
 
 ### Attaching Elements Dynamically
@@ -490,7 +454,6 @@ const config: LiveAvatarConfig = {
 
 const callbacks: LiveAvatarCallbacks = {
   onConnected: () => console.log('Connected'),
-  onAudioLevel: (level: number) => console.log(level),
 };
 
 const avatar = new LiveAvatarSDK(config, callbacks);
@@ -506,7 +469,6 @@ const avatar = new LiveAvatarSDK(config, callbacks);
 
 **Requirements:**
 - WebRTC
-- Web Audio API
 - ES2020+
 
 ## Troubleshooting

@@ -52,7 +52,6 @@ import type {
  * - WebRTC connection management via Daily.co
  * - Audio/video track handling
  * - Microphone control
- * - Audio level visualization
  * - Session lifecycle management
  *
  * @example
@@ -61,7 +60,6 @@ import type {
  *   { agentId: 'my-agent-id' },
  *   {
  *     onConnected: () => console.log('Connected!'),
- *     onAudioLevel: (level) => updateVisualization(level),
  *   }
  * );
  *
@@ -75,12 +73,6 @@ export class LiveAvatarSDK {
 
   // Pipecat client
   private client: PipecatClient | null = null;
-
-  // Audio visualization
-  private audioContext: AudioContext | null = null;
-  private analyser: AnalyserNode | null = null;
-  private animationFrame: number | null = null;
-  private audioDataArray: Uint8Array | null = null;
 
   // State tracking
   private _connectionState: ConnectionState;
@@ -100,11 +92,9 @@ export class LiveAvatarSDK {
    */
   constructor(config: LiveAvatarConfig, callbacks: LiveAvatarCallbacks = {}) {
     this.config = {
-      sessionEndpoint: 'https://api.iwy.ai/v1/start-agent-session',
-      enableAudioVisualization: true,
       enableMic: true,
       enableCam: false,
-      warmStart: false,
+      warmStart: true,
       ...config,
     };
     this.callbacks = callbacks;
@@ -336,12 +326,14 @@ export class LiveAvatarSDK {
     return this.client?.tracks() || null;
   }
 
+  private static readonly SESSION_ENDPOINT = 'https://api.iwy.ai/v1/start-agent-session';
+
   /**
    * Request a session from the backend
    */
   private async requestSession(): Promise<SessionResponse> {
     console.log('[iwy] Requesting session from endpoint');
-    const response = await fetch(this.config.sessionEndpoint!, {
+    const response = await fetch(LiveAvatarSDK.SESSION_ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -402,9 +394,6 @@ export class LiveAvatarSDK {
       } else if (participant?.local && track.kind === 'audio') {
         // Local audio track
         this.callbacks.onLocalAudioTrack?.(track);
-        if (this.config.enableAudioVisualization) {
-          this.startAudioVisualization(new MediaStream([track]));
-        }
       }
     });
 
@@ -442,12 +431,9 @@ export class LiveAvatarSDK {
       }
     }
 
-    // Local audio (for visualization)
+    // Local audio
     if (tracks.local?.audio) {
       this.callbacks.onLocalAudioTrack?.(tracks.local.audio);
-      if (this.config.enableAudioVisualization) {
-        this.startAudioVisualization(new MediaStream([tracks.local.audio]));
-      }
     }
   }
 
@@ -469,66 +455,6 @@ export class LiveAvatarSDK {
     element.play().catch((err) => {
       console.error('[iwy] Error playing video:', err);
     });
-  }
-
-  /**
-   * Start audio level visualization
-   */
-  private startAudioVisualization(stream: MediaStream): void {
-    try {
-      // Create audio context and analyser
-      this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-      const source = this.audioContext.createMediaStreamSource(stream);
-      this.analyser = this.audioContext.createAnalyser();
-      this.analyser.fftSize = 32;
-      source.connect(this.analyser);
-
-      this.audioDataArray = new Uint8Array(this.analyser.fftSize);
-
-      // Animation loop for audio level updates
-      const updateAudioLevel = () => {
-        if (!this.analyser || !this.audioDataArray) return;
-
-        this.analyser.getByteTimeDomainData(this.audioDataArray as any);
-
-        // Calculate RMS (root mean square) for audio level
-        let sum = 0;
-        for (let i = 0; i < this.audioDataArray.length; i++) {
-          const normalized = (this.audioDataArray[i] - 128) / 128;
-          sum += normalized * normalized;
-        }
-        const rms = Math.sqrt(sum / this.audioDataArray.length);
-
-        // Scale and clamp to 0-1 range
-        const level = Math.min(rms * 3, 1);
-
-        this.callbacks.onAudioLevel?.(level);
-
-        this.animationFrame = requestAnimationFrame(updateAudioLevel);
-      };
-
-      updateAudioLevel();
-    } catch (err) {
-      console.error('[iwy] Error starting audio visualization:', err);
-    }
-  }
-
-  /**
-   * Stop audio visualization
-   */
-  private stopAudioVisualization(): void {
-    if (this.animationFrame) {
-      cancelAnimationFrame(this.animationFrame);
-      this.animationFrame = null;
-    }
-
-    if (this.audioContext) {
-      this.audioContext.close().catch((err) => console.error('[iwy] Error closing audio context:', err));
-      this.audioContext = null;
-    }
-
-    this.analyser = null;
-    this.audioDataArray = null;
   }
 
   /**
@@ -560,7 +486,6 @@ export class LiveAvatarSDK {
    * Clean up resources
    */
   private cleanup(): void {
-    this.stopAudioVisualization();
     this.client = null;
     this._connectionState = 'disconnected' as ConnectionState;
     this.sessionPromise = null;

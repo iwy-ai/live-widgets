@@ -1,3 +1,35 @@
+# [1.10.0](https://github.com/iwy-ai/live-widgets/compare/v1.9.3...v1.10.0) (2025-12-07)
+
+### Breaking Changes (Headless SDK)
+
+* **Audio Visualization Removed**: Removed `enableAudioVisualization` config option and `onAudioLevel` callback - audio visualization functionality has been removed from the SDK
+* **Session Endpoint Hardcoded**: Removed `sessionEndpoint` config option - session endpoint is now hardcoded internally
+
+### Changed
+
+* **Default Warm Start**: `warmStart` now defaults to `true` instead of `false` for faster connections out of the box
+
+### Migration Guide
+
+If you were using any of the removed options, update your code:
+
+```typescript
+// Before (1.9.x)
+const sdk = new LiveAvatarSDK({
+  agentId: 'your-agent-id',
+  sessionEndpoint: 'https://custom-endpoint.com', // No longer supported
+  enableAudioVisualization: true, // No longer supported
+  onAudioLevel: (level) => { ... }, // No longer supported
+  warmStart: false // Was the default
+});
+
+// After (1.10.0)
+const sdk = new LiveAvatarSDK({
+  agentId: 'your-agent-id',
+  warmStart: false // Now defaults to true, set explicitly if needed
+});
+```
+
 ## [1.9.3](https://github.com/iwy-ai/live-widgets/compare/v1.9.2...v1.9.3) (2025-11-23)
 
 

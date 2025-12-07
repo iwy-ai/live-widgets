@@ -40,12 +40,6 @@ export interface LiveAvatarConfig {
   agentId: string;
 
   /**
-   * Custom session endpoint URL
-   * @default "https://api.iwy.ai/v1/start-agent-session"
-   */
-  sessionEndpoint?: string;
-
-  /**
    * Video element to attach bot video stream to
    */
   videoElement?: HTMLVideoElement;
@@ -54,12 +48,6 @@ export interface LiveAvatarConfig {
    * Audio element to attach bot audio stream to
    */
   audioElement?: HTMLAudioElement;
-
-  /**
-   * Enable audio level visualization
-   * @default true
-   */
-  enableAudioVisualization?: boolean;
 
   /**
    * Enable microphone by default
@@ -75,7 +63,7 @@ export interface LiveAvatarConfig {
 
   /**
    * Pre-fetch session on initialization for faster connection
-   * @default false
+   * @default true
    */
   warmStart?: boolean;
 }
@@ -113,12 +101,6 @@ export interface LiveAvatarCallbacks {
    * Called when an error occurs
    */
   onError?: (error: Error) => void;
-
-  /**
-   * Called with audio level updates (0-1 range)
-   * @param level - Current audio level from 0 (silent) to 1 (loud)
-   */
-  onAudioLevel?: (level: number) => void;
 
   /**
    * Called when bot video track is available

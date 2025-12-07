@@ -54,7 +54,6 @@ SDK handles all the complex stuff:
 - ✅ Daily.co WebRTC transport
 - ✅ Session management (backend API calls)
 - ✅ Media track handling (video/audio)
-- ✅ Audio visualization (Web Audio API)
 - ✅ Microphone control
 - ✅ Connection state management
 - ✅ Error handling
@@ -92,7 +91,6 @@ const avatar = new LiveAvatarSDK(
   },
   {
     onConnected: () => console.log('Connected!'),
-    onAudioLevel: (level) => updateMyCustomVisualization(level),
   }
 );
 
@@ -116,12 +114,11 @@ Simple, familiar pattern that works across all frameworks.
 ```typescript
 {
   agentId: string;              // Required
-  sessionEndpoint?: string;     // Optional custom endpoint
   videoElement?: HTMLVideoElement;
   audioElement?: HTMLAudioElement;
-  enableAudioVisualization?: boolean;
   enableMic?: boolean;
   enableCam?: boolean;
+  warmStart?: boolean;          // Default: true (pre-fetches session)
 }
 ```
 
@@ -132,8 +129,8 @@ Simple, familiar pattern that works across all frameworks.
   onConnected?: () => void;
   onDisconnected?: () => void;
   onError?: (error: Error) => void;
-  onAudioLevel?: (level: number) => void;
   onVideoTrack?: (track: MediaStreamTrack) => void;
+  onAudioTrack?: (track: MediaStreamTrack) => void;
   // ... and more
 }
 ```
@@ -173,17 +170,7 @@ avatar.error             // Error | null
 6. **Bot joins** → `onBotConnected` callback
 7. **Media tracks available** → `onVideoTrack`, `onAudioTrack` callbacks
 8. **SDK attaches** tracks to provided elements
-9. **Audio visualization** starts (if enabled)
-10. **User can control** mic, disconnect, etc.
-
-### Audio Visualization
-
-Uses Web Audio API:
-- Creates `AudioContext` + `AnalyserNode`
-- Connects local audio track
-- Calculates RMS (root mean square) of audio signal
-- Calls `onAudioLevel(0-1)` callback in requestAnimationFrame loop
-- Developer uses value to update custom visualization
+9. **User can control** mic, disconnect, etc.
 
 ### Media Track Management
 
@@ -225,7 +212,6 @@ Includes Pipecat Client SDK and Daily.co transport bundled.
 
 Requirements:
 - WebRTC APIs
-- Web Audio API
 - ES2020 features
 - HTTPS (for microphone access)
 
@@ -251,7 +237,6 @@ Added to `package.json`:
 ### 1. Vanilla JavaScript
 Complete HTML file with:
 - Custom styled UI
-- Audio visualization bar
 - Connection state badges
 - Error handling
 
@@ -318,7 +303,6 @@ Potential additions:
 | Complexity | High | Low |
 | Session handling | Manual | Automatic |
 | Track management | Manual | Automatic |
-| Audio viz | Manual | Automatic |
 | Learning curve | Steep | Gentle |
 
 ## Conclusion
