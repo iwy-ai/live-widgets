@@ -1,3 +1,41 @@
+# [1.11.0](https://github.com/iwy-ai/live-widgets/compare/v1.10.1...v1.11.0) (2025-12-07)
+
+### Features
+
+* **Headless SDK**: Add `warmRestart` configuration option for controlling post-disconnect session pre-fetching
+* **Separation of Concerns**: `warmStart` now only controls initialization pre-fetching, `warmRestart` controls post-call pre-fetching
+* **Configurability**: Fine-grained control over session pre-fetching behavior for different use cases
+
+### Technical Details
+
+* Added `warmRestart` boolean property to `LiveAvatarConfig` interface (default: `true`)
+* Modified `handleDisconnect()` to check `warmRestart` instead of `warmStart`
+* Both options enabled by default for optimal user experience
+* Independent control allows disabling post-call pre-fetch while keeping init pre-fetch
+
+### Usage
+
+```typescript
+// Both enabled (recommended - default behavior)
+const avatar = new LiveAvatarSDK({
+  agentId: 'your-agent-id',
+  warmStart: true,      // Pre-fetch on init
+  warmRestart: true,    // Pre-fetch after each call ends
+});
+
+// Disable post-call pre-fetching only
+const avatar = new LiveAvatarSDK({
+  agentId: 'your-agent-id',
+  warmRestart: false,   // Don't pre-fetch after disconnect
+});
+```
+
+### Impact
+
+- Better control over SDK behavior for different application patterns
+- Users who don't expect multiple calls can disable `warmRestart` to save API calls
+- No breaking changes - default behavior unchanged
+
 ## [1.10.1](https://github.com/iwy-ai/live-widgets/compare/v1.10.0...v1.10.1) (2025-12-07)
 
 * Republish with corrected package metadata

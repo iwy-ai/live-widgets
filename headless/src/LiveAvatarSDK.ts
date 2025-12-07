@@ -98,6 +98,7 @@ export class LiveAvatarSDK {
       enableMic: true,
       enableCam: false,
       warmStart: true,
+      warmRestart: true,
       ...config,
     };
     this.callbacks = callbacks;
@@ -484,9 +485,9 @@ export class LiveAvatarSDK {
     this.cleanup();
     this.callbacks.onDisconnected?.();
 
-    // Pre-fetch session for next call if warm start is enabled and SDK not destroyed
-    if (this.config.warmStart && !this._isDestroyed) {
-      console.log('[iwy] Call ended, pre-fetching session for next call');
+    // Pre-fetch session for next call if warm restart is enabled and SDK not destroyed
+    if (this.config.warmRestart && !this._isDestroyed) {
+      console.log('[iwy] Warm restart: Pre-fetching session for next call');
       this.preloadSession();
     }
   }

@@ -110,6 +110,36 @@ export interface LiveAvatarConfig {
    * @default true
    */
   warmStart?: boolean;
+
+  /**
+   * Pre-fetch a new session after each call ends for faster reconnection.
+   *
+   * When enabled, the SDK automatically requests a new session from the backend
+   * immediately after a call disconnects. This ensures the next `connect()` call
+   * will be fast, as the session is already prepared.
+   *
+   * This is separate from `warmStart` which only pre-fetches on initialization.
+   * Use both together for optimal performance across the entire session lifecycle.
+   *
+   * @default true
+   *
+   * @example
+   * ```typescript
+   * // Both enabled (recommended for best UX)
+   * const avatar = new LiveAvatarSDK({
+   *   agentId: 'demo',
+   *   warmStart: true,      // Pre-fetch on init
+   *   warmRestart: true,    // Pre-fetch after each call ends
+   * });
+   *
+   * // Disable if you don't expect multiple calls per session
+   * const avatar = new LiveAvatarSDK({
+   *   agentId: 'demo',
+   *   warmRestart: false,   // Don't pre-fetch after disconnect
+   * });
+   * ```
+   */
+  warmRestart?: boolean;
 }
 
 /**

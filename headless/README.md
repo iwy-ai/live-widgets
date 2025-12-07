@@ -181,6 +181,7 @@ new LiveAvatarSDK(config: LiveAvatarConfig, callbacks?: LiveAvatarCallbacks)
 | `enableMic` | boolean | No | `true` | Enable microphone by default |
 | `enableCam` | boolean | No | `false` | Enable camera (if needed) |
 | `warmStart` | boolean | No | `true` | Pre-fetch session on init for faster connection |
+| `warmRestart` | boolean | No | `true` | Pre-fetch new session after each call ends for faster reconnection |
 
 ### Callbacks (`LiveAvatarCallbacks`)
 
@@ -433,23 +434,40 @@ await avatar.connect();
 
 > **Note:** The SDK internally prevents duplicate track attachment, so mixing modes won't cause errors. However, choosing one approach makes your code clearer.
 
-### Warm-Start (Faster Connections)
+### Warm-Start and Warm-Restart (Faster Connections)
 
-By default, `warmStart` is enabled which pre-fetches the session from the backend immediately when the SDK is initialized. This reduces the latency when `connect()` is called.
+The SDK provides two options for optimizing connection speed:
+
+**`warmStart`** (default: `true`) - Pre-fetches the session when the SDK is initialized, reducing latency on the first `connect()` call.
+
+**`warmRestart`** (default: `true`) - Pre-fetches a new session immediately after each call ends, ensuring fast reconnection for subsequent calls.
 
 ```javascript
+// Both enabled (recommended for best UX)
 const avatar = new LiveAvatarSDK({
   agentId: 'your-agent-id',
-  // warmStart: true is the default - session is pre-fetched automatically
+  warmStart: true,      // Pre-fetch on init (default)
+  warmRestart: true,    // Pre-fetch after each call ends (default)
 });
 
-// When user clicks connect, connection will be faster as session is already ready
+// First connect is fast (warmStart)
+await avatar.connect();
+// ... call ends ...
+// Next connect is also fast (warmRestart pre-fetched in background)
 await avatar.connect();
 
-// To disable warm start:
+// Disable warm restart if you don't expect multiple calls per session
 const avatar = new LiveAvatarSDK({
   agentId: 'your-agent-id',
-  warmStart: false, // Disable pre-fetching
+  warmStart: true,      // Still pre-fetch on init
+  warmRestart: false,   // Don't pre-fetch after disconnect
+});
+
+// Disable all pre-fetching (cold start only)
+const avatar = new LiveAvatarSDK({
+  agentId: 'your-agent-id',
+  warmStart: false,
+  warmRestart: false,
 });
 ```
 
