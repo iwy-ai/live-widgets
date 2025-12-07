@@ -1,3 +1,7 @@
+## [1.10.1](https://github.com/iwy-ai/live-widgets/compare/v1.10.0...v1.10.1) (2025-12-07)
+
+* Republish with corrected package metadata
+
 # [1.10.0](https://github.com/iwy-ai/live-widgets/compare/v1.9.3...v1.10.0) (2025-12-07)
 
 ### Breaking Changes (Headless SDK)
