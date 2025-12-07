@@ -87,6 +87,9 @@ temp/
 
 .node_modules
 
+#claude code
+.serena/
+
 # File for testing purposes:
 main.html
 temp.md
